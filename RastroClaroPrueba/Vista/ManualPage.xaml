@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RastroClaroPrueba.Vista.ManualPage">
+
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#778FF4" Offset="0.0"/>
+            <GradientStop Color="#61D2E8" Offset="0.5"/>
+            <GradientStop Color="#846AFA" Offset="1.0"/>
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Barra superior -->
+        <Grid Grid.Row="0" BackgroundColor="White" Padding="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                <Label Text="Nombre del Paciente" TextColor="Black" VerticalOptions="Center" />
+                <Label Text=" - Nombre del Usuario" TextColor="Black" VerticalOptions="Center" />
+            </StackLayout>
+            <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
+        </Grid>
+
+        <!-- Espacio para el mapa -->
+        <StackLayout Grid.Row="1">
+            <!-- Aquí se pondrá el mapa más adelante -->
+        </StackLayout>
+
+        <!-- Barra inferior -->
+        <Grid Grid.Row="2" BackgroundColor="White" Padding="5">
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
+                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50"/>
+                <Image Source="historiall.png" HeightRequest="60" WidthRequest="50"/>
+                <Image Source="manualselect.png" HeightRequest="60" WidthRequest="50"/>
+                <Image Source="medical.png" HeightRequest="60" WidthRequest="50"/>
+            </StackLayout>
+        </Grid>
+    </Grid>
+
+</ContentPage>

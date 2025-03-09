@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="RastroClaroPrueba.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:RastroClaroPrueba.Vista"
+    Shell.FlyoutBehavior="Disabled"
+    Title="RastroClaroPrueba">
+    <TabBar>
+        <ShellContent ContentTemplate="{DataTemplate local:InicioSesionPage}" />
+        
+        <ShellContent
+            ContentTemplate="{DataTemplate local:InicioPage}" 
+            Icon="{OnPlatform 'mapa.png'}"/>
+
+        <ShellContent
+            ContentTemplate="{DataTemplate local:HistorialPage}" 
+            Icon="{OnPlatform 'historial.png'}"/>
+        
+        <ShellContent
+            ContentTemplate="{DataTemplate local:ManualPage}" 
+            Icon="{OnPlatform 'manual.png'}"/>
+        
+        <ShellContent
+            ContentTemplate="{DataTemplate local:MedicalPage}" 
+            Icon="{OnPlatform 'paciente.png'}"/>
+
+
+    </TabBar>
+
+</Shell>
