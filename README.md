@@ -1,9 +1,7 @@
 # P9UPBC
 Carpetas contenidas
 - Principal (aqui es donde estara la aplicacion MAUI)
-  -
   Indicar carpetas Models
-  -
   Indicar carpetas Views
 - 8266 (UNICAMENTE LO DEL CONTROLADOR)
 - API ( UNICAMENTE LA API )
