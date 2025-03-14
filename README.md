@@ -16,4 +16,5 @@ Carpetas contenidas
 - RASBPERRY (UNICAMENTE LO DEL RASPBERRY)
   - Base de datos
   - Configuracion para acceso remoto
-## COMENTAR TODOS LOS CAMBIOS CADA CARPETA CON SU RESPECTIVO README POR FAVOR PARA EVITAR DESORDEN SE LES QUIERE ^_^
+## COMENTAR TODOS LOS CAMBIOS CADA CARPETA CON SU RESPECTIVO README POR FAVOR PARA EVITAR DESORDEN SE LES QUIERE 
+### Aqui pondremos todo mas general para que pueda entenderse como funciona el proyecto
