@@ -10,4 +10,6 @@ Carpetas contenidas
   - JS
   - HTML
 - RASBPERRY (UNICAMENTE LO DEL RASPBERRY)
+  - Base de datos
+  - Configuracion para acceso remoto
 ## COMENTAR TODOS LOS CAMBIOS PORFAVOR PARA EVITAR DESORDEN SE LES QUIERE ^_^
