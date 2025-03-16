@@ -17,19 +17,25 @@ public partial class InicioPage : ContentPage
             // Cargar la URL en el WebView
             webView.Source = url;
     }
-    private async void OnMedicalImageTapped(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new MedicalPage());
-    }
-    private async void OnHistorialTapped(object sender, EventArgs e)
+    private async void OnHistorialTapped(object sender, TappedEventArgs e)
     {
         // Navegar a la página HistorialPage
         await Navigation.PushAsync(new HistorialPage());
     }
-    private async void OnManualTapped(object sender, EventArgs e)
+
+    private async void OnManualTapped(object sender, TappedEventArgs e)
     {
-        // Navegar a la página ManualPage
+        // Navegar a la página HistorialPage
         await Navigation.PushAsync(new ManualPage());
     }
 
+    private async void OnPacienteTapped(object sender, TappedEventArgs e)
+    {
+        // Navegar a la página HistorialPage
+        await Navigation.PushAsync(new MedicalPage());
+    }
+    private async void OnMapaTapped(object sender, TappedEventArgs e)
+    {
+        
+    }
 }

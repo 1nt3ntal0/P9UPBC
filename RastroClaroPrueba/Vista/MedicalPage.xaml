@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RastroClaroPrueba.Vista.MedicalPage">
+             x:Class="RastroClaroPrueba.Vista.MedicalPage"
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="#778FF4" Offset="0.0"/>
@@ -18,7 +19,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-                <Label Text="Paciente: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
+                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" />
                 <Label Text=" - Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
@@ -71,11 +72,28 @@
         <!-- Barra inferior -->
         <Grid Grid.Row="2" BackgroundColor="White" Padding="5">
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
-                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50"/>
-                <Image Source="historiall.png" HeightRequest="60" WidthRequest="50"/>
-                <Image Source="manual.png" HeightRequest="60" WidthRequest="50"/>
-                <Image Source="medicalselect.png" HeightRequest="60" WidthRequest="50">
-                    
+                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMapaTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="historial.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="manual.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnManualTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                    </Image.GestureRecognizers>
                 </Image>
             </StackLayout>
         </Grid>
