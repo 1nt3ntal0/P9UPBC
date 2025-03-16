@@ -1,4 +1,13 @@
 # API 
+* Se requiere importar las siguientes librerias
+  * pip install flask
+  * pip install flask-sqlalchemy
+  * pip install werkzeug
+  * pip install pyjwt
+  * pip install flask-migrate
+  * pip install flask-cors
+
+
 * Importacion de librerias
 ~~~ 
 from flask import Flask, request, jsonify
