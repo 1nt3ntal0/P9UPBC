@@ -9,23 +9,6 @@
     <TabBar>
         <ShellContent ContentTemplate="{DataTemplate local:InicioSesionPage}" />
         
-        <ShellContent
-            ContentTemplate="{DataTemplate local:InicioPage}" 
-            Icon="{OnPlatform 'mapa.png'}"/>
-
-        <ShellContent
-            ContentTemplate="{DataTemplate local:HistorialPage}" 
-            Icon="{OnPlatform 'historial.png'}"/>
-        
-        <ShellContent
-            ContentTemplate="{DataTemplate local:ManualPage}" 
-            Icon="{OnPlatform 'manual.png'}"/>
-        
-        <ShellContent
-            ContentTemplate="{DataTemplate local:MedicalPage}" 
-            Icon="{OnPlatform 'paciente.png'}"/>
-
-
     </TabBar>
 
 </Shell>
