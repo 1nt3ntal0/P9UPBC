@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RastroClaroPrueba.Vista.InicioPage"
              NavigationPage.HasNavigationBar="False">
-    
+
+    <!-- Fondo con degradado -->
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="#778FF4" Offset="0.0"/>
@@ -20,27 +21,17 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Paciente: Nombre" FontSize="16" VerticalOptions="Center" />
-                <Label Text="Usuario: Nombre" FontSize="14" VerticalOptions="Center" />
+                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" />
+                <Label Text="Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
 
-
-        <!-- Contenedor principal MAPAA -->
-        <Grid Grid.Row="1" Padding="10">
-            <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                <Label Text="Mapa" 
-                       FontAttributes="Bold" FontSize="24" 
-                       TextColor="Black"
-                       HorizontalOptions="Center"
-                       Margin="10" />
-
-                <WebView x:Name="webView"
-                         VerticalOptions="FillAndExpand"
-                         HorizontalOptions="FillAndExpand"/>
-            </StackLayout>
-        </Grid>
+        <!-- Espacio para el mapa -->
+        <StackLayout Grid.Row="1" Padding="10">
+            <Label Text="Mapa" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+            <WebView x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
 
         <!-- Barra inferior -->
         <Grid Grid.Row="2" BackgroundColor="White" Padding="5">
@@ -62,7 +53,7 @@
                         <TapGestureRecognizer Tapped="OnManualTapped" />
                     </Image.GestureRecognizers>
                 </Image>
-
+                
                 <Image Source="paciente.png" HeightRequest="60" WidthRequest="50">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnPacienteTapped" />
@@ -71,5 +62,4 @@
             </StackLayout>
         </Grid>
     </Grid>
-
 </ContentPage>

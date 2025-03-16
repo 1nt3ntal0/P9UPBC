@@ -18,9 +18,9 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+            <StackLayout Orientation="Vertical" VerticalOptions="Center">
                 <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" />
-                <Label Text=" - Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
+                <Label Text="Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
