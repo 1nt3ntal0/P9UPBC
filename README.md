@@ -5,7 +5,7 @@ Carpetas contenidas
   - Indicar archivos de la carpeta Views
 - 8266 (UNICAMENTE LO DEL CONTROLADOR)
 - API ( UNICAMENTE LA API )
-- SITIO WEB ( UNICAMENTE LO DEL SITIO WEB)
+- SITIO WEB ( UNICAMENTE LO DEL SITIO WEB se debe conectar a otra tabla debido a que solo deben iniciar sesion el personal)
   - CSS
   - JS
   - HTML
