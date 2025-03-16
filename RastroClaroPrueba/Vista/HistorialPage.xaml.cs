@@ -13,16 +13,22 @@ public partial class HistorialPage : ContentPage
     }
     private async void CargarHistorial()
     {
-        var filePath = Path.Combine(FileSystem.AppDataDirectory, "historial_rutas.html");
+        string fileName = "historial_rutas.html";
+        string filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
 
+        // Copiar el archivo desde los recursos si no existe
         if (!File.Exists(filePath))
         {
-            using var stream = await FileSystem.OpenAppPackageFileAsync("historial_rutas.html");
+            using var stream = await FileSystem.OpenAppPackageFileAsync(fileName);
             using var reader = new StreamReader(stream);
-            var content = await reader.ReadToEndAsync();
+            string content = await reader.ReadToEndAsync();
             File.WriteAllText(filePath, content);
         }
 
+        // Imprime la ruta del archivo para depuración
+        Console.WriteLine($"Ruta del archivo en Android: {filePath}");
+
+        // Cargar en WebView usando "file://"
         webView.Source = new UrlWebViewSource { Url = $"file://{filePath}" };
     }
 
