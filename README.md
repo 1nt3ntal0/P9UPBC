@@ -8,7 +8,7 @@ Carpetas contenidas
 - - - - - - 
 - API ( UNICAMENTE LA API )
 - - - - - - 
-- SITIO WEB ( UNICAMENTE LO DEL SITIO WEB)
+- SITIO WEB ( UNICAMENTE LO DEL SITIO WEB se requiere una tabla unicamente para logeo )
   - CSS
   - JS
   - HTML
