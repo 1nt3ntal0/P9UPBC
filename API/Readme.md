@@ -1,5 +1,6 @@
 # API 
 * Se requiere importar las siguientes librerias
+  * pip install pymysql
   * pip install flask
   * pip install flask-sqlalchemy
   * pip install werkzeug
