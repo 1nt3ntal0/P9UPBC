@@ -16,5 +16,50 @@ Carpetas contenidas
 - RASBPERRY (UNICAMENTE LO DEL RASPBERRY)
   - Base de datos
   - Configuracion para acceso remoto
+ 
+# Descripcion tecnica del proyecto:
+Para el proyecto RastroClaro se utilizara :
+- Una Raspberry Pi4 la cual estara funcionando como servidor.
+- El Raspberry contara con una API , Sistema Web y Base de datos:
+  - Por comodidad se utilizo una API creada en Pyhon con flask
+    - Debe gestionar multiples solicitudes tanto desde el sitio web como desde la aplicacion de Maui
+    - Unicamente contar con los endpoints que se requieran realmente.
+  - Sistema Web el sistema web debe comunicarse con la API para hacer solicitudes a la base de datos
+    - Home ( Mostrara Vision , Mision de la empresa) ** Acceso no restringido
+    - Nosotros ( Mostrara Informacion general del proyecto) ** Acceso no restringido **
+    - Login ( Permitira inicar sesion apoyandose en la API) ** Acceso no restirngido
+    - Cliente ( Permitira registrar clientes Apoyandose con la API) ** Acceso Restringido Unicamente personal CON SESION ACTIVA
+    - Paciente ( Permite registrar pacientes y asociarlos a clientes apoyandose con la API) ** Acceso Restringido unicamente personal CON SESION ACTIVA
+    - Usuario (Informacio del cliente y permite cambiar contrasena apoyandose en la API) ** Acceso Restringido unicamente al cliente correspondiete
+    - Datos Generales ( Permite visualizar y modificar datos del paciente) ** Acceso Restirngido unicamente al paciente ligado con el cliente
+      
+  - La base de datos constara de multiples tablas (usuarios , coordenadas, cliente , paciente)
+    - Debe contar con la tabla Empleados
+    - Debe contar con la tabla Clientes
+    - Debe contar con la tabla Pacientes (con Fk a Clientes)
+    - Debe contar con la tabla Datos Generales ( con Fk al paciente)
+      
+  - Ademas utilizaremos NGNX para poder tener acceso desde dispositivos fuera de red hacia el sistema y la API.
+    - Configurar para que tengan acceso desde el exterior a el sitio o API segun se requeira
+      
+- Aplicacion Movil desarrollada en MAUI
+  - La aplicacion permitira a los usuarios Iniciar sesion
+    - Mediante la API debe validar las credenciales
+  - Darle seguimiento a los pacientes mediante coordenadas y el uso de OpenStreetMap
+    - Mediante la API debe leer las coordenadas para mostrar la ruta y la ubicacion actual del paciente
+  - Consumira la API para validar informacion (login , info de cliente , info de paciente, etc)
+    - Obtener los datos del pacinte o cliente segun requiera unicamnete los permitidos
+  - Contara con manual de usuario.
+    - Manual en Pdf disponible para guia rapida para los Usuarios.
+
+- Placa 8266
+  - Contar con soporte para el modulo GPS.
+  - Contar con soporte para modulo para SimCard.
+  - Enviar los datos a la API (unicamente requiere enviar no requiere obtener info de la API).
+  
+## Raspberry
+
+
+
 ## COMENTAR TODOS LOS CAMBIOS CADA CARPETA CON SU RESPECTIVO README POR FAVOR PARA EVITAR DESORDEN SE LES QUIERE 
 ### Aqui pondremos todo mas general para que pueda entenderse como funciona el proyecto
