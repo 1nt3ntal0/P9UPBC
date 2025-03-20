@@ -1,16 +1,16 @@
 # Crear tablas con los siguients campos
-- Tabla Empleado 
+- Tabla Empleado ** Metodos para la API: Post Delete **
   - id (int 11, primary , autoincrementable) 
   - Username (varchar 20)
   - Correo (varchar 20)
   - Password(varchar 120 (ENCRIPTADO))
 
-- Tabla Clientes
+- Tabla Clientes **  Metodos para la API: Post Get Update Delete **
   - id (int 11)
   - Nombre (varchar 100)
   - Password(varchar 120 (ENCRIPTADO))
 
-- Tabla Datos Generales
+- Tabla Datos Generales ** Metodos para la API: Post Get Update Delete **
   - Id (int 11)
   - Nombre (varchar 100)
   - FechaDeNacimiento (data time ( MM:DD:YY)
@@ -25,7 +25,7 @@
     - Ninguna , Persona muda , Persona sorda , persona sorda con dificultades en el habla , Afasia , Trastorno del lenguaje , Mutismo selectivo
   - Comentarios (varchar 200)
 
-- Coordenadas
+- Coordenadas **  Metodos para la API: Post Get **
   - latitude (float 6)
   - longitud (float 6)
   - id de paciente  (int 11)
