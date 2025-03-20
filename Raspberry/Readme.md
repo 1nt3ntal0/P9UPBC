@@ -23,7 +23,7 @@
     - Inicial , Intermedio , Avnazado
   - Comunicacion (int 2)
     - Ninguna , Persona muda , Persona sorda , persona sorda con dificultades en el habla , Afasia , Trastorno del lenguaje , Mutismo selectivo
-    - Comentarios 
+  - Comentarios 
 
 - Coordenadas
   - latitude (float 6)
