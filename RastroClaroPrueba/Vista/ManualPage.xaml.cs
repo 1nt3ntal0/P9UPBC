@@ -1,3 +1,5 @@
+//using RastroClaroPrueba.Utils; /// sin validad la lectura del archivo
+
 namespace RastroClaroPrueba.Vista;
 
 public partial class ManualPage : ContentPage
@@ -25,5 +27,15 @@ public partial class ManualPage : ContentPage
     private async void OnPacienteTapped(object sender, TappedEventArgs e)
     {
         await Navigation.PushAsync(new MedicalPage());
+    }
+
+    private void Button_Clicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private void Pdf_Clicked(object sender, EventArgs e)
+    {
+
     }
 }

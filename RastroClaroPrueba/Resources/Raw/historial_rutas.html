@@ -22,11 +22,12 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
-        // Simulación de rutas en Mexicali
+        // Get a toda la tabla
         var rutas = [
             [[32.6245, -115.4523], [32.6300, -115.4500], [32.6350, -115.4450]],
             [[32.6280, -115.4550], [32.6325, -115.4600], [32.6380, -115.4650]]
         ];
+        ///Toma todas las fecha de la db a un array
 
         rutas.forEach(ruta => {
             L.polyline(ruta, { color: 'blue', weight: 4 }).addTo(map);

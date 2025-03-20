@@ -31,8 +31,10 @@
             <Frame Padding="5" CornerRadius="10" BorderColor="Gray" BackgroundColor="White">
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="usuario.png" WidthRequest="20" HeightRequest="20"/>
-                    <Entry Placeholder="Usuario" 
+                    <Entry x:Name="UserEntry"
+                        Placeholder="Usuario" 
                         FontSize="16"
+                        Keyboard="Text"
                         TextColor="Black"
                         PlaceholderColor="Gray"
                         HorizontalOptions="Center"/>
@@ -43,7 +45,7 @@
             <Frame Padding="5" CornerRadius="10" BorderColor="Gray" BackgroundColor="White" >
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="Contrasena.png" WidthRequest="20" HeightRequest="20"/>
-                    <Entry x:Name="ContrasenaEntry"
+                    <Entry x:Name="PassEntry"
                         Placeholder="Contraseña" 
                         IsPassword="True"
                         FontSize="16"
@@ -79,14 +81,15 @@
                  Clicked="OnIniciarSesionClicked"/>
 
 
-            <!-- Botón Registrarse -->
+            <!-- Botón Adquirir producto -->
             <Button Text="Adquidir Producto"
                  BackgroundColor="White"
                  TextColor="Black"
                  FontSize="16"
                  CornerRadius="10"
                  Padding="5"
-                 HorizontalOptions="Fill"/>
+                 HorizontalOptions="Fill"
+                    Clicked="BtnProducto_Clicked"/>
 
         </VerticalStackLayout>
     </ScrollView>

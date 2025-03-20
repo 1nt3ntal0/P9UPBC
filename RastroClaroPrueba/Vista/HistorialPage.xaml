@@ -20,19 +20,24 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" />
-                <Label Text="Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
+                <Label Text="Historial" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/> </Grid>
 
         <!-- Espacio para el mapa -->
         <StackLayout Grid.Row="1"  Padding="10">
-            <Label Text="Historial" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-
+            <HorizontalStackLayout Padding="15">
+                <Entry Text="Dia" />
+                <Entry Text="Mes" />
+                <Entry Text="Año" />
+                <Button Text="Buscar" />
+            </HorizontalStackLayout>
             <WebView x:Name="webView"
-         VerticalOptions="FillAndExpand"
-         HorizontalOptions="FillAndExpand"/>
+                     VerticalOptions="FillAndExpand"
+                     HorizontalOptions="FillAndExpand"/>
         </StackLayout>
+        
+        
 
         <!-- Barra inferior -->
         <Grid Grid.Row="2" BackgroundColor="White" Padding="5">
