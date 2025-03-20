@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RastroClaroPrueba.Vista.ManualPage">
+             x:Class="RastroClaroPrueba.Vista.ManualPage"
+             NavigationPage.HasNavigationBar="False">
 
     <ContentPage.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -13,30 +14,65 @@
 
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Barra superior -->
-        <Grid Grid.Row="0" BackgroundColor="White" Padding="10">
+        <Grid Grid.Row="0" BackgroundColor="White" Padding="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <StackLayout Orientation="Horizontal" VerticalOptions="Center">
-                <Label Text="Nombre del Paciente" TextColor="Black" VerticalOptions="Center" />
-                <Label Text=" - Nombre del Usuario" TextColor="Black" VerticalOptions="Center" />
+            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" FontAttributes="Bold" />
+                <Label Text="Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
 
         <!-- Espacio para el mapa -->
-        <StackLayout Grid.Row="1">
+        <StackLayout Grid.Row="1" Padding="10" Spacing="20" Margin="15">
+            <Label Text="Guia de usuario" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black"/>
+            <Button Text="PDF guia de usuario"
+                    BackgroundColor="White"
+                    TextColor="Black"
+                    FontSize="16"
+                    Margin="40"
+                    CornerRadius="10"
+                    Padding="5"
+                    HorizontalOptions="Fill"
+                    Clicked="Pdf_Clicked"/>
+
+            <Label Text="Soporte" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black"/>
+            <Label Text="Nuestra interfaz de soporte esta diseñada para prindar ayuda en caso de cualquier aplicacion....."  TextColor="Black"
+                   FontSize="16" />
+
+
             <!-- Aquí se pondrá el mapa más adelante -->
         </StackLayout>
 
         <!-- Barra inferior -->
         <Grid Grid.Row="2" BackgroundColor="White" Padding="5">
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
-                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50"/>
-                <Image Source="historiall.png" HeightRequest="60" WidthRequest="50"/>
-                <Image Source="manualselect.png" HeightRequest="60" WidthRequest="50"/>
-                <Image Source="medical.png" HeightRequest="60" WidthRequest="50"/>
+                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMapaTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="historial.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnManualTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Image Source="paciente.png" HeightRequest="60" WidthRequest="50">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                    </Image.GestureRecognizers>
+                </Image>
             </StackLayout>
         </Grid>
     </Grid>

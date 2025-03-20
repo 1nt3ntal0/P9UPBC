@@ -63,7 +63,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls.Maps" Version="9.0.50" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -82,6 +82,10 @@
 	  <MauiXaml Update="Vista\MedicalPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Utils\" />
 	</ItemGroup>
 
 </Project>
