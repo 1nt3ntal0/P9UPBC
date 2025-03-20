@@ -37,7 +37,8 @@ Para el proyecto RastroClaro se utilizara :
     - Debe contar con la tabla Empleados
     - Debe contar con la tabla Clientes
     - Debe contar con la tabla Pacientes (con Fk a Clientes)
-    - Debe contar con la tabla Datos Generales ( con Fk al paciente)
+    - Debe contar con la tabla Datos Generales ( con Fk al Paciente)
+    - Debe contar con la tabla Coordenadas (con Fk Pacientes)
       
   - Ademas utilizaremos NGNX para poder tener acceso desde dispositivos fuera de red hacia el sistema y la API.
     - Configurar para que tengan acceso desde el exterior a el sitio o API segun se requeira
