@@ -43,7 +43,7 @@ Para el proyecto RastroClaro se utilizara :
     - Configurar para que tengan acceso desde el exterior a el sitio o API segun se requeira
       
 - Aplicacion Movil desarrollada en MAUI
-  - La aplicacion permitira a los usuarios Iniciar sesion
+  - La aplicacion permitira a los usuarios Iniciar sesion (YA HAY COMINICACION A LA API (ㆆ_ㆆ))
     - Mediante la API debe validar las credenciales
   - Darle seguimiento a los pacientes mediante coordenadas y el uso de OpenStreetMap
     - Mediante la API debe leer las coordenadas para mostrar la ruta y la ubicacion actual del paciente
