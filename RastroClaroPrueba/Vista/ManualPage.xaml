@@ -20,15 +20,29 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" />
+                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" FontAttributes="Bold" />
                 <Label Text="Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
 
         <!-- Espacio para el mapa -->
-        <StackLayout Grid.Row="1" Padding="10">
-            <Label Text="Soporte" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+        <StackLayout Grid.Row="1" Padding="10" Spacing="20" Margin="15">
+            <Label Text="Guia de usuario" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black"/>
+            <Button Text="PDF guia de usuario"
+                    BackgroundColor="White"
+                    TextColor="Black"
+                    FontSize="16"
+                    Margin="40"
+                    CornerRadius="10"
+                    Padding="5"
+                    HorizontalOptions="Fill"
+                    Clicked="Pdf_Clicked"/>
+
+            <Label Text="Soporte" FontSize="24" FontAttributes="Bold" HorizontalOptions="Start" TextColor="Black"/>
+            <Label Text="Nuestra interfaz de soporte esta diseñada para prindar ayuda en caso de cualquier aplicacion....."  TextColor="Black"
+                   FontSize="16" />
+
 
             <!-- Aquí se pondrá el mapa más adelante -->
         </StackLayout>

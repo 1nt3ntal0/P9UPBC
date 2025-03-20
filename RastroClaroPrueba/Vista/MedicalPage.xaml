@@ -19,8 +19,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Paciente: Nombre" FontSize="16" TextColor="Black" VerticalOptions="Center" />
-                <Label Text="Usuario: Nombre" FontSize="14" TextColor="Black" VerticalOptions="Center" />
+                <Label Text="Información" FontSize="24" TextColor="Black" VerticalOptions="Center" FontAttributes="Bold" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
@@ -29,25 +28,55 @@
         <ScrollView Grid.Row="1" Padding="10">
             <VerticalStackLayout Spacing="10">
                 <!-- Título principal en negro -->
-                <Label Text="Carta médica" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                <Label Text="Usuario" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
-                <Label Text="Nombre del paciente" TextColor="Black"/>
-                <Entry Placeholder="Ingrese el nombre" FontSize="14"/>
 
-                <Label Text="Edad" TextColor="Black"/>
-                <Entry Placeholder="Ingrese la edad" FontSize="14" Keyboard="Numeric"/>
+                <!-- Hacer binding en placeholders para usuario -->
+                <Label Text="Nombre de usuario" TextColor="Black" FontAttributes="Bold" />
+                <Entry FontSize="14" Opacity=".5" BackgroundColor="White" TextColor="Black" />
 
-                <Label Text="Teléfono de emergencia" TextColor="Black"/>
-                <Entry Placeholder="Ingrese el teléfono" FontSize="14" Keyboard="Telephone"/>
+                <Label Text="Correo" TextColor="Black" FontAttributes="Bold" />
+                <Entry FontSize="14" Keyboard="Numeric" Opacity=".5" BackgroundColor="White" TextColor="Black" />
 
-                <Label Text="Tipo de sangre" TextColor="Black"/>
-                <Entry Placeholder="Ingrese el tipo de sangre" FontSize="14"/>
+                <Label Text="Contraseña" TextColor="Black" FontAttributes="Bold" />
+                <Entry Placeholder="Cambiar constraseña" FontSize="14" Opacity=".5" BackgroundColor="White" TextColor="Black" />
 
-                <Label Text="Religión" TextColor="Black"/>
-                <Entry Placeholder="Ingrese la religión" FontSize="14"/>
+                <Button Text="Guardar" BackgroundColor="white" TextColor="Black" Margin="30" />
+                
+                
+                <Label Text="Paciente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
-                <Label Text="Grado de Alzheimer" TextColor="Black"/>
-                <Picker Title="Seleccione un grado" FontSize="14">
+                <Label Text="Nombre del paciente" TextColor="Black" FontAttributes="Bold" />
+                <Entry Placeholder="Ingrese el nombre" FontSize="14" Opacity=".5" BackgroundColor="White" TextColor="Black" />
+
+                <Label Text="Fecha de nacimiento" TextColor="Black" FontAttributes="Bold" />
+                <Entry Placeholder="DD-MM-AAAA" FontSize="14" Keyboard="Numeric" Opacity=".5" BackgroundColor="White" TextColor="Black" />
+
+                <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
+                <Entry Placeholder="Ingrese el teléfono" FontSize="14" Keyboard="Telephone" Opacity=".5" BackgroundColor="White" TextColor="Black" />
+
+                <Label Text="Tipo de sangre" TextColor="Black" FontAttributes="Bold" />
+                <Picker x:Name="sangre" Title="Seleccione un tipo de sangre" FontSize="14" TextColor="Black">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>A+</x:String>
+                            <x:String>A-</x:String>
+                            <x:String>B+</x:String>
+                            <x:String>B-</x:String>
+                            <x:String>O+</x:String>
+                            <x:String>O-</x:String>
+                            <x:String>AB+</x:String>
+                            <x:String>AB-</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+
+
+                <Label Text="Religión" TextColor="Black" FontAttributes="Bold" />
+                <Entry Placeholder="Ingrese la religión" FontSize="14" Opacity=".5" BackgroundColor="White" TextColor="Black" />
+
+                <Label Text="Grado de Alzheimer" TextColor="Black" FontAttributes="Bold" />
+                <Picker Title="Seleccione un grado" FontSize="14" TextColor="Black" >
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Inicial</x:String>
@@ -57,17 +86,37 @@
                     </Picker.ItemsSource>
                 </Picker>
 
-                <Label Text="Dificultades de comunicación" TextColor="Black"/>
-                <Entry Placeholder="Ingrese dificultades" FontSize="14"/>
+                <Label Text="Dificultad de comunicación" TextColor="Black" FontAttributes="Bold" />
+                <Picker x:Name="dificultadComunicacion" Title="Seleccione una dificultad" FontSize="14" TextColor="Black">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Ninguna</x:String>
+                            <x:String>Persona muda</x:String>
+                            <x:String>Persona sorda</x:String>
+                            <x:String>Persona sorda con dificultad en el habla</x:String>
+                            <x:String>Afasia</x:String>
+                            <x:String>Trastorno del lenguaje</x:String>
+                            <x:String>Mutismo selectivo</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
+                
 
-                <Label Text="Teléfono adicional" TextColor="Black"/>
-                <Entry Placeholder="Nombre y teléfono" FontSize="14"/>
+                <Label Text="Teléfono adicional" TextColor="Black" FontAttributes="Bold" />
+                <Entry Placeholder="Nombre y teléfono" FontSize="14" Opacity=".5" BackgroundColor="White" TextColor="Black" />
 
 
 
-                <Button Text="Guardar" BackgroundColor="#61D2E8" TextColor="White"/>
+                <Button Text="Guardar" BackgroundColor="white" TextColor="Black" Margin="30" />
+
+            
+
             </VerticalStackLayout>
         </ScrollView>
+        
+        
+        
+        
 
         <!-- Barra inferior -->
         <Grid Grid.Row="2" BackgroundColor="White" Padding="5">

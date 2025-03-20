@@ -8,15 +8,15 @@ namespace RastroClaroPrueba.Models
 {
     internal class pacientes
     {
-        public string FkID { get; set; }
+        public int FkID { get; set; }
         public string nombre { get; set; }
-        public string edad { get; set; }
-        public string sangre { get; set; }
+        public DateTime fecha { get; set; }//fecha de nacimiento
+        public int sangre { get; set; }
         public string religion { get; set; }
-        public string Grado { get; set; }
-        public string Extra { get; set; }
-        public string Telefono { get; set; }
-        public string coordenadas { get; set; }
+        public int Grado { get; set; }
+        public int Extra { get; set; }
+        public long Telefono { get; set; }
+        
 
     }
 }

@@ -14,7 +14,7 @@ namespace RastroClaroPrueba.Models
         public ApiService()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://127.0.0.1:5000"); // Cambia esto por la URL de tu API
+            _httpClient.BaseAddress = new Uri("http://127.0.0.1:5000"); // Cambia esto por la URL de tu API///SE VA A IP DE LA RASPBERRY
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -29,7 +29,8 @@ namespace RastroClaroPrueba.Models
         }
 
         // Método para actualizar un paciente
-        public async Task<string> UpdatePacienteAsync(int fkId, string nombre, int? edad = null, string religion = null, string grado = null, string extra = null, string telefono = null)
+        public async Task<string> UpdatePacienteAsync(int fkId, string nombre, int? edad = null, string religion = null,
+            string grado = null, string extra = null, string telefono = null)
         {
             var data = new { FkID = fkId, nombre, edad, religion, Grado = grado, Extra = extra, Telefono = telefono };
             var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
