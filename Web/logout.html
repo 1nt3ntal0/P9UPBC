@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <script>
+        // Eliminar el token y nombre de usuario al cerrar sesión
+        localStorage.removeItem('token');
+        localStorage.removeItem('nombre_usuario');
+        
+        // Redirigir a la página de login
+        window.location.href = "home.html";
+    </script>
+</head>
+<body>
+    <p>Redirigiendo a la página de login...</p>
+</body>
+</html>
