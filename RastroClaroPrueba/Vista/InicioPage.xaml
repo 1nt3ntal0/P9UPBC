@@ -3,58 +3,63 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RastroClaroPrueba.Vista.InicioPage"
              NavigationPage.HasNavigationBar="False">
-
-    <!-- Fondo con degradado -->
-    <ContentPage.Background>
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-            <GradientStop Color="#778FF4" Offset="0.0"/>
-            <GradientStop Color="#61D2E8" Offset="0.5"/>
-            <GradientStop Color="#846AFA" Offset="1.0"/>
-        </LinearGradientBrush>
-    </ContentPage.Background>
-
+    
+    
     <Grid RowDefinitions="Auto,*,Auto">
-        <!-- Barra superior -->
-        <Grid Grid.Row="0" BackgroundColor="White" Padding="5">
+        <!-- Barra superior con degradado -->
+        <Grid Grid.Row="0" Padding="5">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#61D2E8" Offset="0.0"/>
+                    <GradientStop Color="#61D2E8" Offset="0.50"/>
+                    <GradientStop Color="White" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Mapa" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                
+                <Label Text="Mapa" FontSize="24" TextColor="Black" Margin="20" VerticalOptions="Center" FontAttributes="Bold" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
 
         <!-- Espacio para el mapa -->
-        <StackLayout Grid.Row="1" Padding="10" >
+        <StackLayout Grid.Row="1" Padding="10"  Background="White">
             
-            <WebView x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+            <WebView x:Name="webView" VerticalOptions="Fill" HorizontalOptions="FillAndExpand"/>
         </StackLayout>
 
         <!-- Barra inferior -->
-        <Grid Grid.Row="2" BackgroundColor="White" Padding="5">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center">
-                <Image Source="mapa_sele.png" HeightRequest="60" WidthRequest="50">
+        <Grid Grid.Row="2" Padding="10">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="White" Offset="0.0"/>
+                    <GradientStop Color="#846AFA" Offset="0.3"/>
+                    <GradientStop Color="#846AFA" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnMapaTapped" />
                     </Image.GestureRecognizers>
                 </Image>
 
-                <Image Source="historial.png" HeightRequest="60" WidthRequest="50">
+                <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHistorialTapped" />
                     </Image.GestureRecognizers>
                 </Image>
 
-                <Image Source="manual.png" HeightRequest="60" WidthRequest="50">
+                <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnManualTapped" />
                     </Image.GestureRecognizers>
                 </Image>
-                
-                <Image Source="paciente.png" HeightRequest="60" WidthRequest="50">
+
+                <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
                     <Image.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnPacienteTapped" />
                     </Image.GestureRecognizers>

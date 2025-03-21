@@ -34,12 +34,12 @@ public partial class HistorialPage : ContentPage
 
     private async void OnMapaTapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PushAsync(new InicioPage());
+        await Navigation.PushModalAsync(new InicioPage());
     }
 
     private async void OnManualTapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PushAsync(new ManualPage());
+        await Navigation.PushModalAsync(new ManualPage());
     }
 
     private async void OnPacienteTapped(object sender, TappedEventArgs e)

@@ -20,19 +20,19 @@ public partial class InicioPage : ContentPage
     private async void OnHistorialTapped(object sender, TappedEventArgs e)
     {
         // Navegar a la página HistorialPage
-        await Navigation.PushAsync(new HistorialPage());
+        await Navigation.PushModalAsync(new HistorialPage());
     }
 
     private async void OnManualTapped(object sender, TappedEventArgs e)
     {
         // Navegar a la página HistorialPage
-        await Navigation.PushAsync(new ManualPage());
+        await Navigation.PushModalAsync(new ManualPage());
     }
 
     private async void OnPacienteTapped(object sender, TappedEventArgs e)
     {
         // Navegar a la página HistorialPage
-        await Navigation.PushAsync(new MedicalPage());
+        await Navigation.PushModalAsync(new MedicalPage());
     }
     private async void OnMapaTapped(object sender, TappedEventArgs e)
     {
