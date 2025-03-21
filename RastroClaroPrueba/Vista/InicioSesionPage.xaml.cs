@@ -48,7 +48,7 @@ public partial class InicioSesionPage : ContentPage
                     string token = tokenElement.GetString();
                     Preferences.Set("AuthToken", token); // Guardamos el token para futuras solicitudes
 
-                    await Navigation.PushAsync(new InicioPage()); // Navegar a la pantalla principal
+                   // await Navigation.PushModalAsync(new InicioPage()); // Navegar a la pantalla principal
                     return;
                 }
             }
@@ -64,6 +64,6 @@ public partial class InicioSesionPage : ContentPage
 
     private async void BtnProducto_Clicked(object sender, EventArgs e)
     {
-        DisplayAlert("Alerta", "No tienes permisos para acceder a esta funcionalidad", "Aceptar");
+        await Navigation.PushModalAsync(new InicioPage());
     }
 }
