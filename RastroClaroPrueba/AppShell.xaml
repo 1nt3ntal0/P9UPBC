@@ -10,6 +10,7 @@
     <TabBar>
         <ShellContent ContentTemplate="{DataTemplate local:InicioSesionPage}" />
         
+        
     </TabBar>
 
 </Shell>

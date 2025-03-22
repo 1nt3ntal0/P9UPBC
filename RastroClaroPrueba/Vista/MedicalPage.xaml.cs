@@ -9,12 +9,12 @@ public partial class MedicalPage : ContentPage
 
     private async void OnMapaTapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PushModalAsync(new InicioPage());
+        Application.Current.MainPage = new InicioPage();
     }
 
     private async void OnHistorialTapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PushModalAsync(new HistorialPage());
+        Application.Current.MainPage = new HistorialPage();
     }
 
     private async void OnPacienteTapped(object sender, TappedEventArgs e)
@@ -24,7 +24,7 @@ public partial class MedicalPage : ContentPage
 
     private async void OnManualTapped(object sender, TappedEventArgs e)
     {
-        await Navigation.PushModalAsync(new ManualPage());
+        Application.Current.MainPage = new ManualPage();
     }
 
     private void BtnUserSave_Clicked(object sender, EventArgs e)
