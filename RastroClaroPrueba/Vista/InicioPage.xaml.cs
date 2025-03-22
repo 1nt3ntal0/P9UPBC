@@ -15,24 +15,33 @@ public partial class InicioPage : ContentPage
             string url = $"https://www.openstreetmap.org/#map={zoom}/{latitud}/{longitud}";
 
             // Cargar la URL en el WebView
-            webView.Source = url;
+            webViewMapa.Source = url;
     }
     private async void OnHistorialTapped(object sender, TappedEventArgs e)
     {
-        // Navegar a la página HistorialPage
-        await Navigation.PushModalAsync(new HistorialPage());
+        //// Navegar a la página HistorialPage
+        //await Navigation.PushModalAsync(new HistorialPage());
+
+        Application.Current.MainPage = new HistorialPage();
+
     }
 
     private async void OnManualTapped(object sender, TappedEventArgs e)
     {
         // Navegar a la página HistorialPage
-        await Navigation.PushModalAsync(new ManualPage());
+        //await Navigation.PushModalAsync(new ManualPage());
+        // Verifica si hay más de una página en la pila
+        Application.Current.MainPage = new ManualPage();
     }
 
     private async void OnPacienteTapped(object sender, TappedEventArgs e)
     {
         // Navegar a la página HistorialPage
-        await Navigation.PushModalAsync(new MedicalPage());
+        //await Navigation.PushModalAsync(new MedicalPage());
+
+        // Verifica si hay más de una página en la pila
+        Application.Current.MainPage = new MedicalPage();
+
     }
     private async void OnMapaTapped(object sender, TappedEventArgs e)
     {

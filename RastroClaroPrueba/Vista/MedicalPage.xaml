@@ -13,7 +13,7 @@
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#61D2E8" Offset="0.0"/>
                     <GradientStop Color="#61D2E8" Offset="0.50"/>
-                    <GradientStop Color="Transparent" Offset="1.0"/>
+                    <GradientStop Color="White" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.ColumnDefinitions>
@@ -48,9 +48,15 @@
                 <Entry Placeholder="Ingrese el nombre" FontSize="14"  BackgroundColor="#c5f6ff" TextColor="Black" />
 
                 <Label Text="Fecha de nacimiento" TextColor="Black" FontAttributes="Bold" />
-                <Entry Placeholder="DD-MM-AAAA" FontSize="14" Keyboard="Numeric"  BackgroundColor="#c5f6ff" TextColor="Black" />
+                <DatePicker 
+                    Format="dd/MM/yyyy" 
+                    TextColor="Black" 
+                    BackgroundColor="#c5f6ff"
+                    FontSize="14"
+                    HorizontalOptions="FillAndExpand"/>
+                
 
-                <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
+                    <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
                 <Entry Placeholder="Ingrese el teléfono" FontSize="14" Keyboard="Telephone"   BackgroundColor="#c5f6ff" TextColor="Black" />
 
                 <Label Text="Tipo de sangre" TextColor="Black" FontAttributes="Bold" />
@@ -114,31 +120,46 @@
                     <GradientStop Color="#846AFA" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
-                <Image Source="mapa_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnMapaTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
 
-                <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnHistorialTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
 
-                <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnManualTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="mapa_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMapaTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-                <Image Source="paciente.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnPacienteTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManualTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="paciente.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+            </HorizontalStackLayout>
+
         </Grid>
     </Grid>
 </ContentPage>
