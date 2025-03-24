@@ -64,6 +64,7 @@ public partial class InicioSesionPage : ContentPage
 
     private async void BtnProducto_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PushModalAsync(new InicioPage());
+        
+        Application.Current.MainPage = new InicioPage();
     }
 }
