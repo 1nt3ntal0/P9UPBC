@@ -28,7 +28,7 @@
         <!-- Espacio para el mapa -->
         <StackLayout Grid.Row="1" Padding="10"  Background="White">
             
-            <WebView x:Name="webView" VerticalOptions="Fill" HorizontalOptions="FillAndExpand"/>
+            <WebView x:Name="webViewMapa" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
         </StackLayout>
 
         <!-- Barra inferior -->
@@ -40,31 +40,45 @@
                     <GradientStop Color="#846AFA" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
-                <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnMapaTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
 
-                <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnHistorialTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMapaTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-                <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnManualTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-                <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnPacienteTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManualTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+            </HorizontalStackLayout>
+
         </Grid>
     </Grid>
 </ContentPage>

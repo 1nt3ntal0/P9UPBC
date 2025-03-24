@@ -1,104 +1,84 @@
-using System;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using RastroClaroPrueba.Models; 
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RastroClaroPrueba.Vista.InicioPage"
+             NavigationPage.HasNavigationBar="False">
+    
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Barra superior con degradado -->
+        <Grid Grid.Row="0" Padding="5">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#61D2E8" Offset="0.0"/>
+                    <GradientStop Color="#61D2E8" Offset="0.50"/>
+                    <GradientStop Color="White" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                <Label Text="Mapa" FontSize="24" TextColor="Black" Margin="20" VerticalOptions="Center" FontAttributes="Bold" />
+            </StackLayout>
+            <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
+        </Grid>
 
-namespace RastroClaroPrueba.Vista
-{
-    public partial class InicioPage : ContentPage
-    {
-        private ApiService _apiService;
-        private int _pacienteId = 1;
-        private bool _isRefreshing = false; 
+        <!-- Espacio para el mapa -->
+        <StackLayout Grid.Row="1" Padding="10"  Background="White">
+            
+            <WebView x:Name="webViewMapa" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
 
-        public InicioPage()
-        {
-            InitializeComponent();
-            _apiService = new ApiService();
-            LoadLastLocation(); 
-            StartLocationRefresh(); 
-        }
-        private void UpdateMap(double latitude, double longitude)
-        {
-            var htmlContent = $@"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Mapa</title>
-                    <link rel='stylesheet' href='https://unpkg.com/leaflet/dist/leaflet.css' />
-                    <script src='https://unpkg.com/leaflet/dist/leaflet.js'></script>
-                    <style>
-                        #map {{ height: 100%; }}
-                    </style>
-                </head>
-                <body>
-                    <div id='map'></div>
-                    <script>
-                        var map = L.map('map').setView([{latitude}, {longitude}], 15);
-                        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
-                            maxZoom: 19,
-                        }}).addTo(map);
-                        var marker = L.marker([{latitude}, {longitude}]).addTo(map);
-                    </script>
-                </body>
-                </html>";
+        <!-- Barra inferior -->
+        <Grid Grid.Row="2" Padding="10">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="White" Offset="0.0"/>
+                    <GradientStop Color="#846AFA" Offset="0.3"/>
+                    <GradientStop Color="#846AFA" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
 
-            webView.Source = new HtmlWebViewSource { Html = htmlContent };
-        }
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMapaTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-        private async Task LoadLastLocation()
-        {
-            try
-            {
-                var ultimaCoordenada = await _apiService.GetCoordenadasAsync(_pacienteId);
-                if (ultimaCoordenada != null)
-                {
-                    UpdateMap(ultimaCoordenada.Latitude, ultimaCoordenada.Longitude);
-                }
-                else
-                {
-                    await DisplayAlert("Error", "No se encontraron coordenadas para el paciente.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al cargar las coordenadas: {ex.Message}", "OK");
-            }
-        }
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-        private void StartLocationRefresh()
-        {
-            Device.StartTimer(TimeSpan.FromSeconds(10), () =>
-            {
-                if (!_isRefreshing)
-                {
-                    _isRefreshing = true;
-                    Task.Run(async () => await LoadLastLocation()).Wait(); 
-                    _isRefreshing = false;
-                }
-                return true;
-            });
-        }
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManualTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-        private async void OnHistorialTapped(object sender, TappedEventArgs e)
-        {
-            await Navigation.PushModalAsync(new HistorialPage());
-        }
-        private async void OnManualTapped(object sender, TappedEventArgs e)
-        {
-            await Navigation.PushModalAsync(new ManualPage());
-        }
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+            </HorizontalStackLayout>
 
-        // Evento al tocar el ícono de Paciente
-        private async void OnPacienteTapped(object sender, TappedEventArgs e)
-        {
-            await Navigation.PushModalAsync(new MedicalPage());
-        }
-
-        // Evento al tocar el ícono de Mapa
-        private async void OnMapaTapped(object sender, TappedEventArgs e)
-        {
-            // Puedes agregar lógica adicional aquí si es necesario
-        }
-    }
-}
+        </Grid>
+    </Grid>
+</ContentPage>

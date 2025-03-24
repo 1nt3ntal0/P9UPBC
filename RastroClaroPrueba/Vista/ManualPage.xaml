@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Soporte" FontSize="24" TextColor="Black" Margin="10" VerticalOptions="Center" FontAttributes="Bold" />
+                <Label Text="Ayuda" FontSize="24" TextColor="Black" Margin="10" VerticalOptions="Center" FontAttributes="Bold" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
@@ -59,31 +59,44 @@
                     <GradientStop Color="#846AFA" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
-                <Image Source="mapa_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnMapaTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
 
-                <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnHistorialTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="mapa_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMapaTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-                <Image Source="manual.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnManualTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-                <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
-                    <Image.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="OnPacienteTapped" />
-                    </Image.GestureRecognizers>
-                </Image>
-            </StackLayout>
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="manual.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManualTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+            </HorizontalStackLayout>
         </Grid>
     </Grid>
 </ContentPage>
