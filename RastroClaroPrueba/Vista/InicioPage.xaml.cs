@@ -1,41 +1,104 @@
-namespace RastroClaroPrueba.Vista;
+using System;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using RastroClaroPrueba.Models; 
 
-public partial class InicioPage : ContentPage
+namespace RastroClaroPrueba.Vista
 {
-	public InicioPage()
-	{
-		InitializeComponent();
-        
-            // Coordenadas de Mexicali, Baja California, México
-            double latitud = 32.58304614574744;
-            double longitud = -115.36246831218202;
-            int zoom = 140000; // Nivel de zoom
-
-            // URL de OpenStreetMap centrada en Mexicali
-            string url = $"https://www.openstreetmap.org/#map={zoom}/{latitud}/{longitud}";
-
-            // Cargar la URL en el WebView
-            webView.Source = url;
-    }
-    private async void OnHistorialTapped(object sender, TappedEventArgs e)
+    public partial class InicioPage : ContentPage
     {
-        // Navegar a la página HistorialPage
-        await Navigation.PushModalAsync(new HistorialPage());
-    }
+        private ApiService _apiService;
+        private int _pacienteId = 1;
+        private bool _isRefreshing = false; 
 
-    private async void OnManualTapped(object sender, TappedEventArgs e)
-    {
-        // Navegar a la página HistorialPage
-        await Navigation.PushModalAsync(new ManualPage());
-    }
+        public InicioPage()
+        {
+            InitializeComponent();
+            _apiService = new ApiService();
+            LoadLastLocation(); 
+            StartLocationRefresh(); 
+        }
+        private void UpdateMap(double latitude, double longitude)
+        {
+            var htmlContent = $@"
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Mapa</title>
+                    <link rel='stylesheet' href='https://unpkg.com/leaflet/dist/leaflet.css' />
+                    <script src='https://unpkg.com/leaflet/dist/leaflet.js'></script>
+                    <style>
+                        #map {{ height: 100%; }}
+                    </style>
+                </head>
+                <body>
+                    <div id='map'></div>
+                    <script>
+                        var map = L.map('map').setView([{latitude}, {longitude}], 15);
+                        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                            maxZoom: 19,
+                        }}).addTo(map);
+                        var marker = L.marker([{latitude}, {longitude}]).addTo(map);
+                    </script>
+                </body>
+                </html>";
 
-    private async void OnPacienteTapped(object sender, TappedEventArgs e)
-    {
-        // Navegar a la página HistorialPage
-        await Navigation.PushModalAsync(new MedicalPage());
-    }
-    private async void OnMapaTapped(object sender, TappedEventArgs e)
-    {
-        
+            webView.Source = new HtmlWebViewSource { Html = htmlContent };
+        }
+
+        private async Task LoadLastLocation()
+        {
+            try
+            {
+                var ultimaCoordenada = await _apiService.GetCoordenadasAsync(_pacienteId);
+                if (ultimaCoordenada != null)
+                {
+                    UpdateMap(ultimaCoordenada.Latitude, ultimaCoordenada.Longitude);
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se encontraron coordenadas para el paciente.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error al cargar las coordenadas: {ex.Message}", "OK");
+            }
+        }
+
+        private void StartLocationRefresh()
+        {
+            Device.StartTimer(TimeSpan.FromSeconds(10), () =>
+            {
+                if (!_isRefreshing)
+                {
+                    _isRefreshing = true;
+                    Task.Run(async () => await LoadLastLocation()).Wait(); 
+                    _isRefreshing = false;
+                }
+                return true;
+            });
+        }
+
+        private async void OnHistorialTapped(object sender, TappedEventArgs e)
+        {
+            await Navigation.PushModalAsync(new HistorialPage());
+        }
+        private async void OnManualTapped(object sender, TappedEventArgs e)
+        {
+            await Navigation.PushModalAsync(new ManualPage());
+        }
+
+        // Evento al tocar el ícono de Paciente
+        private async void OnPacienteTapped(object sender, TappedEventArgs e)
+        {
+            await Navigation.PushModalAsync(new MedicalPage());
+        }
+
+        // Evento al tocar el ícono de Mapa
+        private async void OnMapaTapped(object sender, TappedEventArgs e)
+        {
+            // Puedes agregar lógica adicional aquí si es necesario
+        }
     }
 }

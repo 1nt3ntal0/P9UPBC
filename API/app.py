@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_cors import CORS  # Importar CORS
+from flask_cors import CORS 
 import jwt
 import datetime
 import os
@@ -44,10 +44,10 @@ class DatosGenerales(db.Model):
     fecha_de_nacimiento = db.Column(db.String(10), nullable=False)
     telefono = db.Column(db.String(10), nullable=False)
     correo = db.Column(db.String(100), nullable=False)
-    sangre = db.Column(db.Integer, nullable=False)  # Entero para tipo de sangre
+    sangre = db.Column(db.Integer, nullable=False)  
     religion = db.Column(db.String(100), nullable=False)
-    grado = db.Column(db.Integer, nullable=False)  # Entero para grado
-    comunicacion = db.Column(db.Integer, nullable=False)  # Entero para comunicación
+    grado = db.Column(db.Integer, nullable=False) 
+    comunicacion = db.Column(db.Integer, nullable=False)  
     comentarios = db.Column(db.String(200))
 
 # Modelo de la tabla 'Coordenadas'
@@ -157,10 +157,10 @@ def crear_datos_generales():
         fecha_de_nacimiento=data['fecha_de_nacimiento'],
         telefono=data['telefono'],
         correo=data.get('correo'),
-        sangre=data.get('sangre'),  # Entero
+        sangre=data.get('sangre'),  
         religion=data.get('religion'),
-        grado=data.get('grado'),  # Entero
-        comunicacion=data.get('comunicacion'),  # Entero
+        grado=data.get('grado'),  
+        comunicacion=data.get('comunicacion'), 
         comentarios=data.get('comentarios')
     )
     db.session.add(nuevos_datos)
@@ -179,10 +179,10 @@ def obtener_datos_generales(id):
         'fecha_de_nacimiento': datos.fecha_de_nacimiento,
         'telefono': datos.telefono,
         'correo': datos.correo,
-        'sangre': datos.sangre,  # Entero
+        'sangre': datos.sangre, 
         'religion': datos.religion,
-        'grado': datos.grado,  # Entero
-        'comunicacion': datos.comunicacion,  # Entero
+        'grado': datos.grado, 
+        'comunicacion': datos.comunicacion,  
         'comentarios': datos.comentarios
     })
 
@@ -202,13 +202,13 @@ def actualizar_datos_generales(id):
     if 'correo' in data:
         datos.correo = data['correo']
     if 'sangre' in data:
-        datos.sangre = data['sangre']  # Entero
+        datos.sangre = data['sangre'] 
     if 'religion' in data:
         datos.religion = data['religion']
     if 'grado' in data:
-        datos.grado = data['grado']  # Entero
+        datos.grado = data['grado']  
     if 'comunicacion' in data:
-        datos.comunicacion = data['comunicacion']  # Entero
+        datos.comunicacion = data['comunicacion']  
     if 'comentarios' in data:
         datos.comentarios = data['comentarios']
 
@@ -226,6 +226,7 @@ def eliminar_datos_generales(id):
     return jsonify({'message': 'Datos generales eliminados exitosamente'})
 
 # Métodos para la tabla 'Coordenadas'
+
 @app.route('/coordenadas', methods=['POST'])
 def crear_coordenadas():
     data = request.json
@@ -243,21 +244,48 @@ def crear_coordenadas():
 
 @app.route('/coordenadas/<int:paciente_id>', methods=['GET'])
 def obtener_coordenadas(paciente_id):
-    coordenadas = Coordenada.query.filter_by(paciente_id=paciente_id).all()
-    if not coordenadas:
+    # Obtener la última coordenada del paciente ordenando por ID de forma descendente
+    ultima_coordenada = Coordenada.query.filter_by(paciente_id=paciente_id).order_by(Coordenada.id.desc()).first()
+    
+    if not ultima_coordenada:
         return jsonify({'message': 'No se encontraron coordenadas para el paciente'}), 404
 
-    coordenadas_json = [
-        {
-            'id': coord.id,
-            'latitude': coord.latitude,
-            'longitude': coord.longitude,
-            'paciente_id': coord.paciente_id
-        }
+    # Devolver solo la última coordenada
+    return jsonify({
+        'id': ultima_coordenada.id,
+        'latitude': ultima_coordenada.latitude,
+        'longitude': ultima_coordenada.longitude,
+        'paciente_id': ultima_coordenada.paciente_id
+    })
+
+@app.route('/coordenadas/por-fecha', methods=['GET'])
+def obtener_coordenadas_por_fecha():
+    # Obtener la fecha desde los parámetros de la solicitud
+    fecha = request.args.get('fecha')
+    if not fecha:
+        return jsonify({'message': 'Se requiere el parámetro "fecha"'}), 400
+
+    try:
+        # Convertir la fecha a un objeto datetime
+        fecha = datetime.strptime(fecha, '%Y-%m-%d')
+    except ValueError:
+        return jsonify({'message': 'Formato de fecha inválido. Use el formato YYYY-MM-DD'}), 400
+
+    # Filtrar las coordenadas por la fecha y ordenarlas de la más antigua a la más reciente
+    coordenadas = Coordenada.query.filter(
+        db.func.date(Coordenada.fecha) == fecha.date()
+    ).order_by(Coordenada.fecha.asc()).all()
+
+    if not coordenadas:
+        return jsonify({'message': 'No se encontraron coordenadas para la fecha especificada'}), 404
+
+    # Formatear las coordenadas en el formato [latitude:longitude, latitude:longitude]
+    coordenadas_formateadas = [
+        f"{coord.latitude}:{coord.longitude}"
         for coord in coordenadas
     ]
-    return jsonify(coordenadas_json)
 
+    return jsonify(coordenadas_formateadas)
 # Ejecutar la aplicación
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)  # Escuchar en todas las interfaces
+    app.run(host='0.0.0.0', port=5000, debug=True)  
