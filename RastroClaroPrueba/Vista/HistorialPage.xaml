@@ -25,15 +25,12 @@
         </Grid>
         
         <!-- Espacio para el mapa y filtros -->
-        <StackLayout Grid.Row="1" Padding="10" Background="White" >
-            <HorizontalStackLayout Padding="10" Spacing="10" HorizontalOptions="Center">
-                <Entry Placeholder="Día" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
-                <Entry Placeholder="Mes" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
-                <Entry Placeholder="Año" WidthRequest="80" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
-                <Button Text="Buscar" />
-            </HorizontalStackLayout>
-            <WebView x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
-        </StackLayout>
+        <HorizontalStackLayout Padding="10" Spacing="10" HorizontalOptions="Center">
+            <Entry x:Name="diaEntry" Placeholder="Día" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
+            <Entry x:Name="mesEntry" Placeholder="Mes" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
+            <Entry x:Name="anoEntry" Placeholder="Año" WidthRequest="80" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
+            <Button Text="Buscar" Clicked="OnBuscarClicked" />
+        </HorizontalStackLayout>
 
         <!-- Barra inferior -->
         <Grid Grid.Row="2" Padding="10">

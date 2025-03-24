@@ -1,70 +1,55 @@
-﻿using System.Text.Json;
+﻿using RastroClaroPrueba.Utils;
+using System;
+using Microsoft.Maui.Controls;
 using RastroClaroPrueba.Models;
 
-namespace RastroClaroPrueba.Vista;
-
-
-public partial class InicioSesionPage : ContentPage
+namespace RastroClaroPrueba.Vista
 {
-    private bool isPasswordVisible = false;
-
-    public InicioSesionPage()
-	{
-		InitializeComponent();
-	}
-
-    private void OnTogglePasswordClicked(object sender, EventArgs e)
+    public partial class InicioSesionPage : ContentPage
     {
+        private bool isPasswordVisible = false;
 
-        isPasswordVisible = !isPasswordVisible;
-        PassEntry.IsPassword = !isPasswordVisible;
-
-        TogglePasswordButton.ImageSource = isPasswordVisible ? "ojo_cerrado.png" : "ojo.png";
-    }
-
-    private async void OnIniciarSesionClicked(object sender, EventArgs e)
-    {
-        string user = UserEntry.Text;
-        string pass = PassEntry.Text;
-
-        if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
+        public InicioSesionPage()
         {
-            await DisplayAlert("Alerta", "Debes ingresar un usuario y contraseña", "Aceptar");
-            return;
+            InitializeComponent();
         }
 
-        ApiService apiService = new ApiService(); // Instancia del servicio
-        string jsonResponse = await apiService.LoginAsync(user, pass);
-
-        if (!string.IsNullOrEmpty(jsonResponse))
+        private void OnTogglePasswordClicked(object sender, EventArgs e)
         {
-            try
+            isPasswordVisible = !isPasswordVisible;
+            PassEntry.IsPassword = !isPasswordVisible;
+            TogglePasswordButton.ImageSource = isPasswordVisible ? "ojo_cerrado.png" : "ojo.png";
+        }
+
+        private async void OnIniciarSesionClicked(object sender, EventArgs e)
+        {
+            string user = UserEntry.Text;
+            string pass = PassEntry.Text;
+
+            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
             {
-                using JsonDocument doc = JsonDocument.Parse(jsonResponse);
-                JsonElement root = doc.RootElement;
-
-                if (root.TryGetProperty("access_token", out JsonElement tokenElement))
-                {
-                    string token = tokenElement.GetString();
-                    Preferences.Set("AuthToken", token); // Guardamos el token para futuras solicitudes
-
-                   // await Navigation.PushModalAsync(new InicioPage()); // Navegar a la pantalla principal
-                    return;
-                }
+                await DisplayAlert("Alerta", "Debes ingresar un usuario y contraseña", "Aceptar");
+                return;
             }
-            catch (Exception ex)
+
+            ApiService apiService = new ApiService();
+            bool loginExitoso = await apiService.LoginAsync(user, pass);
+
+            if (loginExitoso && !string.IsNullOrEmpty(SessionManager.Token) && SessionManager.UserId > 0)
             {
-                await DisplayAlert("Error", $"Error al procesar la respuesta: {ex.Message}", "Aceptar");
+                Preferences.Set("AuthToken", SessionManager.Token);
+                await DisplayAlert("Éxito", "Inicio de sesión correcto", "OK");
+                Application.Current.MainPage = new InicioPage();
+            }
+            else
+            {
+                await DisplayAlert("Error", "Usuario o contraseña incorrectos", "Aceptar");
             }
         }
 
-        await DisplayAlert("Alerta", "Usuario o contraseña incorrectos", "Aceptar");
-    }
-
-
-    private async void BtnProducto_Clicked(object sender, EventArgs e)
-    {
-        
-        Application.Current.MainPage = new InicioPage();
+        private async void BtnProducto_Clicked(object sender, EventArgs e)
+        {
+            Application.Current.MainPage = new InicioPage();
+        }
     }
 }

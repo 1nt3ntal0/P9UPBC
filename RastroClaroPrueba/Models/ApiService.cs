@@ -1,4 +1,7 @@
-﻿using System;
+﻿using RastroClaroPrueba.Utils;
+using RastroClaroPrueba.Models;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -13,34 +16,93 @@ namespace RastroClaroPrueba.Models
 
         public ApiService()
         {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://127.0.0.1:5000"); // Cambia esto por la URL de tu API///SE VA A IP DE LA RASPBERRY
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("http://127.0.0.1:5000") // Cambia esto por la URL de tu API
+            };
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        // Método para iniciar sesión y obtener el token JWT
-        public async Task<string> LoginAsync(string username, string password)
+        public async Task<bool> LoginAsync(string username, string password)
         {
             var data = new { username, password };
             var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("login", content);
-            return await response.Content.ReadAsStringAsync();
+
+            try
+            {
+                var response = await _httpClient.PostAsync("login", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<LoginResponse>(json);
+
+                    SessionManager.UserId = result.Id;
+                    SessionManager.Token = result.Token;
+
+                    return true;
+                }
+                else
+                {
+                    var errorJson = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"Error en el login: {errorJson}");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error en la solicitud: {ex.Message}");
+            }
         }
 
-        // Método para actualizar un paciente
-        public async Task<string> UpdatePacienteAsync(int fkId, string nombre, int? edad = null, string religion = null,
-            string grado = null, string extra = null, string telefono = null)
+        public async Task<usuarios> GetUsuarioAsync(int userId)
         {
-            var data = new { FkID = fkId, nombre, edad, religion, Grado = grado, Extra = extra, Telefono = telefono };
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync("update_paciente", content);
-            return await response.Content.ReadAsStringAsync();
+            var response = await _httpClient.GetAsync($"usuarios/{userId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<usuarios>(json);
+            }
+            else
+            {
+                throw new Exception("Error al obtener los datos del usuario");
+            }
         }
-        // Metodo ultima coordenada
+
+        public async Task<bool> UpdateUsuarioAsync(usuarios usuario)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(usuario), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"usuarios/{usuario.Id}", content);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<pacientes> GetPacienteAsync(int pacienteId)
+        {
+            var response = await _httpClient.GetAsync($"pacientes/{pacienteId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<pacientes>(json);
+            }
+            else
+            {
+                throw new Exception("Error al obtener los datos del paciente");
+            }
+        }
+
+        public async Task<bool> UpdatePacienteAsync(pacientes paciente)
+        {
+            var content = new StringContent(JsonSerializer.Serialize(paciente), Encoding.UTF8, "application/json");
+            var response = await _httpClient.PutAsync($"pacientes/{paciente.FkID}", content);
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<Coordenada> GetCoordenadasAsync(int pacienteId)
         {
             var response = await _httpClient.GetAsync($"coordenadas/{pacienteId}");
+
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
@@ -52,11 +114,35 @@ namespace RastroClaroPrueba.Models
             }
         }
 
+        public async Task<List<Coordenada>> GetCoordenadasPorFechaAsync(int pacienteId, string fecha)
+        {
+            var response = await _httpClient.GetAsync($"coordenadas/por-fecha?paciente_id={pacienteId}&fecha={fecha}");
 
-        // Método para establecer el token JWT en las cabeceras de las solicitudes
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<List<Coordenada>>(json);
+            }
+            else
+            {
+                throw new Exception("Error al obtener las coordenadas");
+            }
+        }
+
         public void SetAuthToken(string token)
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        public void Logout()
+        {
+            SessionManager.ClearSession();
+        }
+
+        public class LoginResponse
+        {
+            public int Id { get; set; }
+            public string Token { get; set; }
         }
     }
 }

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace RastroClaroPrueba.Models
 {
-    internal class pacientes
+    public class pacientes
     {
         public int FkID { get; set; }
         public string nombre { get; set; }
-        public DateTime fecha { get; set; }//fecha de nacimiento
+        public DateTime fecha { get; set; }
         public int sangre { get; set; }
         public string religion { get; set; }
         public int Grado { get; set; }

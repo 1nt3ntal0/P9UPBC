@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RastroClaroPrueba.Models
 {
-    internal class usuarios
+    public  class usuarios
     {
         public string Id { get; set; }
         public string Usuario { get; set; }

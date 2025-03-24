@@ -1,84 +1,119 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RastroClaroPrueba.Vista.InicioPage"
-             NavigationPage.HasNavigationBar="False">
-    
-    
-    <Grid RowDefinitions="Auto,*,Auto">
-        <!-- Barra superior con degradado -->
-        <Grid Grid.Row="0" Padding="5">
-            <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="#61D2E8" Offset="0.0"/>
-                    <GradientStop Color="#61D2E8" Offset="0.50"/>
-                    <GradientStop Color="White" Offset="1.0"/>
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Mapa" FontSize="24" TextColor="Black" Margin="20" VerticalOptions="Center" FontAttributes="Bold" />
-            </StackLayout>
-            <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
-        </Grid>
+using System;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+using RastroClaroPrueba.Models;
+using RastroClaroPrueba.Utils;
 
-        <!-- Espacio para el mapa -->
-        <StackLayout Grid.Row="1" Padding="10"  Background="White">
-            
-            <WebView x:Name="webViewMapa" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
-        </StackLayout>
+namespace RastroClaroPrueba.Vista
+{
+    public partial class InicioPage : ContentPage
+    {
+        private readonly ApiService _apiService;
+        private const int PacienteId = 1;
+        private bool _isRefreshing;
 
-        <!-- Barra inferior -->
-        <Grid Grid.Row="2" Padding="10">
-            <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="White" Offset="0.0"/>
-                    <GradientStop Color="#846AFA" Offset="0.3"/>
-                    <GradientStop Color="#846AFA" Offset="1.0"/>
-                </LinearGradientBrush>
-            </Grid.Background>
+        public InicioPage()
+        {
+            InitializeComponent();
+            _apiService = new ApiService();
+            LoadLastLocation();
+            StartLocationRefresh();
+        }
 
-            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
-                <StackLayout HorizontalOptions="Center">
-                    <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnMapaTapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </StackLayout>
+        private void UpdateMap(double latitude, double longitude)
+        {
+            var htmlContent = $@"
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Mapa</title>
+                    <link rel='stylesheet' href='https://unpkg.com/leaflet/dist/leaflet.css' />
+                    <script src='https://unpkg.com/leaflet/dist/leaflet.js'></script>
+                    <style>
+                        html, body, #map {{ height: 100vh; margin: 0; padding: 0; }}
+                    </style>
+                </head>
+                <body>
+                    <div id='map'></div>
+                    <script>
+                        var map = L.map('map').setView([{latitude}, {longitude}], 15);
+                        L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+                            maxZoom: 19,
+                        }}).addTo(map);
+                        L.marker([{latitude}, {longitude}]).addTo(map);
+                    </script>
+                </body>
+                </html>";
 
-                <StackLayout HorizontalOptions="Center">
-                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </StackLayout>
+            webViewMapa.Source = new HtmlWebViewSource { Html = htmlContent };
+        }
 
-                <StackLayout HorizontalOptions="Center">
-                    <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnManualTapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </StackLayout>
+        private async Task LoadLastLocation()
+        {
+            try
+            {
+                // Obtener el ID del paciente desde SessionManager
+                int pacienteId = SessionManager.UserId;
 
-                <StackLayout HorizontalOptions="Center">
-                    <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
-                        <Image.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
-                        </Image.GestureRecognizers>
-                    </Image>
-                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
-                </StackLayout>
-            </HorizontalStackLayout>
+                // Obtener la última coordenada del paciente
+                var ultimaCoordenada = await _apiService.GetCoordenadasAsync(pacienteId);
 
-        </Grid>
-    </Grid>
-</ContentPage>
+                if (ultimaCoordenada != null)
+                {
+                    // Actualizar el mapa con la última coordenada
+                    UpdateMap(ultimaCoordenada.Latitude, ultimaCoordenada.Longitude);
+                }
+                else
+                {
+                    await DisplayAlert("Error", "No se encontraron coordenadas para el paciente.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"Error al cargar las coordenadas: {ex.Message}", "OK");
+            }
+        }
+
+        private void StartLocationRefresh()
+        {
+            Device.StartTimer(TimeSpan.FromSeconds(10), () =>
+            {
+                if (_isRefreshing) return true;
+
+                _isRefreshing = true;
+                Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    try
+                    {
+                        await LoadLastLocation();
+                    }
+                    finally
+                    {
+                        _isRefreshing = false;
+                    }
+                });
+
+                return true; 
+            });
+        }
+
+        private async void OnHistorialTapped(object sender, TappedEventArgs e)
+        {
+            await Navigation.PushModalAsync(new HistorialPage());
+        }
+
+        private async void OnManualTapped(object sender, TappedEventArgs e)
+        {
+            await Navigation.PushModalAsync(new ManualPage());
+        }
+
+        private async void OnPacienteTapped(object sender, TappedEventArgs e)
+        {
+            await Navigation.PushModalAsync(new MedicalPage());
+        }
+
+        private void OnMapaTapped(object sender, TappedEventArgs e)
+        {
+        }
+    }
+}

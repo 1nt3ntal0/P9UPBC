@@ -1,88 +1,112 @@
 using System;
 using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
-namespace RastroClaroPrueba.Vista;
+using RastroClaroPrueba.Utils;
+using RastroClaroPrueba.Models;
 
-public partial class HistorialPage : ContentPage
+namespace RastroClaroPrueba.Vista
 {
-	public HistorialPage()
-	{
-		InitializeComponent();
-        CargarHistorial();
-    }
-    private async void CargarHistorial()
+    public partial class HistorialPage : ContentPage
     {
-        string fileName = "historial_rutas.html";
-        string filePath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+        private readonly HttpClient _httpClient;
 
-        // Copiar el archivo desde los recursos si no existe
-        if (!File.Exists(filePath))
+        public HistorialPage()
         {
-            using var stream = await FileSystem.OpenAppPackageFileAsync(fileName);
-            using var reader = new StreamReader(stream);
-            string content = await reader.ReadToEndAsync();
-            File.WriteAllText(filePath, content);
+            InitializeComponent();
+            _httpClient = new HttpClient { BaseAddress = new Uri("http://127.0.0.1:5000") };
+            _httpClient.DefaultRequestHeaders.Accept.Clear();
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            CargarHistorial();
         }
 
-        // Imprime la ruta del archivo para depuración
-        Console.WriteLine($"Ruta del archivo en Android: {filePath}");
-
-        // Cargar en WebView usando "file://"
-        webView.Source = new UrlWebViewSource { Url = $"file://{filePath}" };
-    }
-
-    private async void OnMapaTapped(object sender, TappedEventArgs e)
-    {
-
-        Application.Current.MainPage = new InicioPage();
-
-    }
-    private async Task ObtenerCoordenadasPorFecha(string fecha)
-    {
-        try
+        private async void CargarHistorial()
         {
-            var response = await _httpClient.GetAsync($"coordenadas/por-fecha?fecha={fecha}");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var coordenadas = JsonSerializer.Deserialize<List<string>>(json);
+                // Obtener el ID del paciente desde SessionManager
+                int pacienteId = SessionManager.UserId;
 
-                foreach (var coord in coordenadas)
+                // Obtener la fecha seleccionada (puedes usar un DatePicker o campos de entrada)
+                string fecha = $"{diaEntry.Text}-{mesEntry.Text}-{anoEntry.Text}";
+
+                // Obtener las coordenadas por fecha
+                var coordenadas = await _apiService.GetCoordenadasPorFechaAsync(pacienteId, fecha);
+
+                if (coordenadas != null && coordenadas.Any())
                 {
-                    Console.WriteLine(coord); // Ejemplo: "19.4326077:-99.133208"
+                    // Generar el contenido HTML para mostrar las coordenadas en el WebView
+                    var htmlContent = GenerarHtmlCoordenadas(coordenadas);
+                    webView.Source = new HtmlWebViewSource { Html = htmlContent };
+                }
+                else
+                {
+                    await DisplayAlert("Información", "No se encontraron coordenadas para la fecha seleccionada.", "OK");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("Error", "No se encontraron coordenadas para la fecha especificada.", "OK");
+                await DisplayAlert("Error", $"Error al cargar el historial: {ex.Message}", "OK");
             }
         }
-        catch (Exception ex)
+        private async void OnBuscarClicked(object sender, EventArgs e)
         {
-            await DisplayAlert("Error", $"Error al obtener las coordenadas: {ex.Message}", "OK");
+            // Validar que los campos de fecha no estén vacíos
+            if (string.IsNullOrEmpty(diaEntry.Text) || string.IsNullOrEmpty(mesEntry.Text) || string.IsNullOrEmpty(anoEntry.Text))
+            {
+                await DisplayAlert("Error", "Por favor, ingresa el día, mes y año.", "OK");
+                return;
+            }
+
+            // Cargar el historial con la fecha seleccionada
+            CargarHistorial();
+        }
+
+        private string GenerarHtmlCoordenadas(List<Coordenada> coordenadas)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("<!DOCTYPE html>");
+            sb.AppendLine("<html>");
+            sb.AppendLine("<head><title>Historial de Coordenadas</title></head>");
+            sb.AppendLine("<body>");
+            sb.AppendLine("<h1>Historial de Coordenadas</h1>");
+            sb.AppendLine("<ul>");
+
+            foreach (var coord in coordenadas)
+            {
+                sb.AppendLine($"<li>Latitud: {coord.Latitude}, Longitud: {coord.Longitude}</li>");
+            }
+
+            sb.AppendLine("</ul>");
+            sb.AppendLine("</body>");
+            sb.AppendLine("</html>");
+
+            return sb.ToString();
+        }
+        private async void OnHistorialTapped(object sender, TappedEventArgs e)
+        {
+            await DisplayAlert("Historial", "Estás en la página del historial.", "OK");
+        }
+
+        private async void OnMapaTapped(object sender, TappedEventArgs e)
+        {
+            Application.Current.MainPage = new InicioPage();
+        }
+
+        private async void OnManualTapped(object sender, TappedEventArgs e)
+        {
+            Application.Current.MainPage = new ManualPage();
+        }
+
+        private async void OnPacienteTapped(object sender, TappedEventArgs e)
+        {
+            Application.Current.MainPage = new MedicalPage();
         }
     }
-
-    private async void OnManualTapped(object sender, TappedEventArgs e)
-    {
-        //await Navigation.PushModalAsync(new ManualPage());
-        // Asegurarte de que hay más de una página en la pila de navegación
-        Application.Current.MainPage = new ManualPage();
-
-
-    }
-
-    private async void OnPacienteTapped(object sender, TappedEventArgs e)
-    {
-        //await Navigation.PushAsync(new MedicalPage());
-        // Asegurarte de que hay más de una página en la pila de navegación
-        Application.Current.MainPage = new MedicalPage();
-
-    }
-    private async void OnHistorialTapped(object sender, TappedEventArgs e)
-    {
-        
-    }
-
 }
