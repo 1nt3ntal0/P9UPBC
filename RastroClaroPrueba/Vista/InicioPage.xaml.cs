@@ -1,50 +1,84 @@
-namespace RastroClaroPrueba.Vista;
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RastroClaroPrueba.Vista.InicioPage"
+             NavigationPage.HasNavigationBar="False">
+    
+    
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Barra superior con degradado -->
+        <Grid Grid.Row="0" Padding="5">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#61D2E8" Offset="0.0"/>
+                    <GradientStop Color="#61D2E8" Offset="0.50"/>
+                    <GradientStop Color="White" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                <Label Text="Mapa" FontSize="24" TextColor="Black" Margin="20" VerticalOptions="Center" FontAttributes="Bold" />
+            </StackLayout>
+            <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
+        </Grid>
 
-public partial class InicioPage : ContentPage
-{
-	public InicioPage()
-	{
-		InitializeComponent();
-        
-            // Coordenadas de Mexicali, Baja California, México
-            double latitud = 32.58304614574744;
-            double longitud = -115.36246831218202;
-            int zoom = 140000; // Nivel de zoom
+        <!-- Espacio para el mapa -->
+        <StackLayout Grid.Row="1" Padding="10"  Background="White">
+            
+            <WebView x:Name="webViewMapa" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
 
-            // URL de OpenStreetMap centrada en Mexicali
-            string url = $"https://www.openstreetmap.org/#map={zoom}/{latitud}/{longitud}";
+        <!-- Barra inferior -->
+        <Grid Grid.Row="2" Padding="10">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="White" Offset="0.0"/>
+                    <GradientStop Color="#846AFA" Offset="0.3"/>
+                    <GradientStop Color="#846AFA" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
 
-            // Cargar la URL en el WebView
-            webViewMapa.Source = url;
-    }
-    private async void OnHistorialTapped(object sender, TappedEventArgs e)
-    {
-        //// Navegar a la página HistorialPage
-        //await Navigation.PushModalAsync(new HistorialPage());
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="mapa.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMapaTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-        Application.Current.MainPage = new HistorialPage();
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-    }
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManualTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-    private async void OnManualTapped(object sender, TappedEventArgs e)
-    {
-        // Navegar a la página HistorialPage
-        //await Navigation.PushModalAsync(new ManualPage());
-        // Verifica si hay más de una página en la pila
-        Application.Current.MainPage = new ManualPage();
-    }
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="paciente_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+            </HorizontalStackLayout>
 
-    private async void OnPacienteTapped(object sender, TappedEventArgs e)
-    {
-        // Navegar a la página HistorialPage
-        //await Navigation.PushModalAsync(new MedicalPage());
-
-        // Verifica si hay más de una página en la pila
-        Application.Current.MainPage = new MedicalPage();
-
-    }
-    private async void OnMapaTapped(object sender, TappedEventArgs e)
-    {
-        
-    }
-}
+        </Grid>
+    </Grid>
+</ContentPage>

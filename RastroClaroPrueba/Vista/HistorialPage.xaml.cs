@@ -38,6 +38,31 @@ public partial class HistorialPage : ContentPage
         Application.Current.MainPage = new InicioPage();
 
     }
+    private async Task ObtenerCoordenadasPorFecha(string fecha)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"coordenadas/por-fecha?fecha={fecha}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var coordenadas = JsonSerializer.Deserialize<List<string>>(json);
+
+                foreach (var coord in coordenadas)
+                {
+                    Console.WriteLine(coord); // Ejemplo: "19.4326077:-99.133208"
+                }
+            }
+            else
+            {
+                await DisplayAlert("Error", "No se encontraron coordenadas para la fecha especificada.", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Error", $"Error al obtener las coordenadas: {ex.Message}", "OK");
+        }
+    }
 
     private async void OnManualTapped(object sender, TappedEventArgs e)
     {

@@ -37,13 +37,21 @@ namespace RastroClaroPrueba.Models
             var response = await _httpClient.PutAsync("update_paciente", content);
             return await response.Content.ReadAsStringAsync();
         }
-
-       // Método para obtener coordenadas de un paciente
-        public async Task<string> GetCoordenadasAsync(int pacienteId)
+        // Metodo ultima coordenada
+        public async Task<Coordenada> GetCoordenadasAsync(int pacienteId)
         {
-            var response = await _httpClient.GetAsync($"get_coordenadas?paciente_id={pacienteId}");
-            return await response.Content.ReadAsStringAsync();
+            var response = await _httpClient.GetAsync($"coordenadas/{pacienteId}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<Coordenada>(json);
+            }
+            else
+            {
+                throw new Exception("Error al obtener las coordenadas");
+            }
         }
+
 
         // Método para establecer el token JWT en las cabeceras de las solicitudes
         public void SetAuthToken(string token)
