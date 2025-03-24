@@ -1,166 +1,156 @@
- using System;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using RastroClaroPrueba.Models;
-using RastroClaroPrueba.Utils;
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RastroClaroPrueba.Vista.MedicalPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="White">
 
-namespace RastroClaroPrueba.Vista
-{
-    public partial class MedicalPage : ContentPage
-    {
-        private readonly ApiService _apiService;
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Barra superior con degradado -->
+        <Grid Grid.Row="0" Padding="5">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#61D2E8" Offset="0.0"/>
+                    <GradientStop Color="#61D2E8" Offset="0.5"/>
+                    <GradientStop Color="Transparent" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                <Label Text="Información" FontSize="24" TextColor="Black" Margin="10" VerticalOptions="Center" FontAttributes="Bold" />
+            </StackLayout>
+            <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
+        </Grid>
 
-        public MedicalPage()
-        {
-            InitializeComponent();
-            _apiService = new ApiService();
-            CargarDatosUsuario();
-            CargarDatosPaciente();
-        }
+        <!-- Formulario Médico -->
+        <ScrollView Grid.Row="1" Padding="10">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Usuario" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
-        private async void CargarDatosUsuario()
-        {
-            try
-            {
-                // Obtener el ID del usuario desde SessionManager
-                int userId = SessionManager.UserId;
+                <Label Text="Nombre de usuario" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="nombreUsuarioEntry" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
 
-                // Obtener los datos del usuario desde la API
-                var usuario = await _apiService.GetUsuarioAsync(userId);
+                <Label Text="Correo" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="correoEntry" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
 
-                if (usuario != null)
-                {
-                    // Mostrar los datos del usuario en los campos correspondientes
-                    nombreUsuarioEntry.Text = usuario.Usuario;
-                    correoEntry.Text = usuario.correo;
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al cargar los datos del usuario: {ex.Message}", "OK");
-            }
-        }
+                <Label Text="Contraseña" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="passwordEntry" Placeholder="Cambiar contraseña" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" IsPassword="True" />
 
-        private async void CargarDatosPaciente()
-        {
-            try
-            {
-                // Obtener el ID del paciente desde SessionManager o desde el usuario
-                int pacienteId = SessionManager.PacienteId;
+                <Button Clicked="BtnUserSave_Clicked" Text="Guardar cambios" BackgroundColor="#846AFA" TextColor="Black" Margin="30" CornerRadius="10" Padding="5" HorizontalOptions="Fill" />
 
-                // Obtener los datos del paciente desde la API
-                var paciente = await _apiService.GetPacienteAsync(pacienteId);
+                <Label Text="Paciente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
-                if (paciente != null)
-                {
-                    // Mostrar los datos del paciente en los campos correspondientes
-                    nombrePacienteEntry.Text = paciente.nombre;
-                    fechaNacimientoDatePicker.Date = paciente.fecha;
-                    telefonoEntry.Text = paciente.Telefono.ToString();
-                    sangrePicker.SelectedItem = paciente.sangre;
-                    religionEntry.Text = paciente.religion;
-                    gradoPicker.SelectedItem = paciente.Grado.ToString();
-                    dificultadComunicacionPicker.SelectedItem = paciente.comunicacion;
-                    telefonoAdicionalEntry.Text = paciente.Extra.ToString();
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al cargar los datos del paciente: {ex.Message}", "OK");
-            }
-        }
+                <Label Text="Nombre del paciente" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="nombrePacienteEntry" Placeholder="Ingrese el nombre" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
 
-        private async void BtnUserSave_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                // Obtener el ID del usuario desde SessionManager
-                int userId = SessionManager.UserId;
+                <Label Text="Fecha de nacimiento" TextColor="Black" FontAttributes="Bold" />
+                <DatePicker x:Name="fechaNacimientoDatePicker" Format="dd/MM/yyyy" TextColor="Black" BackgroundColor="#c5f6ff" FontSize="14" HorizontalOptions="FillAndExpand" />
 
-                // Crear un objeto con los datos actualizados del usuario
-                var usuarioActualizado = new usuarios
-                {
-                    Id = userId.ToString(),
-                    Usuario = nombreUsuarioEntry.Text,
-                    correo = correoEntry.Text,
-                    Password = passwordEntry.Text // Si se permite cambiar la contraseña
-                };
+                <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="telefonoEntry" Placeholder="Ingrese el teléfono" FontSize="14" Keyboard="Telephone" BackgroundColor="#c5f6ff" TextColor="Black" />
 
-                // Enviar los datos actualizados a la API
-                bool resultado = await _apiService.UpdateUsuarioAsync(usuarioActualizado);
+                <Label Text="Tipo de sangre" TextColor="Black" FontAttributes="Bold" />
+                <Picker x:Name="sangrePicker" Title="Seleccione un tipo de sangre" Background="#c5f6ff" TextColor="Black" FontSize="14">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>A+</x:String>
+                            <x:String>A-</x:String>
+                            <x:String>B+</x:String>
+                            <x:String>B-</x:String>
+                            <x:String>O+</x:String>
+                            <x:String>O-</x:String>
+                            <x:String>AB+</x:String>
+                            <x:String>AB-</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
 
-                if (resultado)
-                {
-                    await DisplayAlert("Éxito", "Datos del usuario actualizados correctamente.", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Error", "No se pudieron actualizar los datos del usuario.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al guardar los datos del usuario: {ex.Message}", "OK");
-            }
-        }
+                <Label Text="Religión" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="religionEntry" Placeholder="Ingrese la religión" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
 
-        private async void BtnPacientSave_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                // Obtener el ID del paciente desde SessionManager o desde el usuario
-                int pacienteId = SessionManager.PacienteId;
+                <Label Text="Grado de Alzheimer" TextColor="Black" FontAttributes="Bold" />
+                <Picker x:Name="gradoPicker" Title="Seleccione un grado" FontSize="14" Background="#c5f6ff" TextColor="Black">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Inicial</x:String>
+                            <x:String>Intermedio</x:String>
+                            <x:String>Avanzado</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
 
-                // Crear un objeto con los datos actualizados del paciente
-                var pacienteActualizado = new pacientes
-                {
-                    FkID = pacienteId,
-                    nombre = nombrePacienteEntry.Text,
-                    fecha = fechaNacimientoDatePicker.Date,
-                    Telefono = long.Parse(telefonoEntry.Text),
-                    sangre = sangrePicker.SelectedItem?.ToString(),
-                    religion = religionEntry.Text,
-                    Grado = int.Parse(gradoPicker.SelectedItem?.ToString() ?? "0"),
-                    comunicacion = dificultadComunicacionPicker.SelectedItem?.ToString(),
-                    Extra = long.Parse(telefonoAdicionalEntry.Text)
-                };
+                <Label Text="Dificultad de comunicación" TextColor="Black" FontAttributes="Bold" />
+                <Picker x:Name="dificultadComunicacionPicker" Title="Seleccione una dificultad" Background="#c5f6ff" FontSize="14" TextColor="Black">
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Ninguna</x:String>
+                            <x:String>Persona muda</x:String>
+                            <x:String>Persona sorda</x:String>
+                            <x:String>Persona sorda con dificultad en el habla</x:String>
+                            <x:String>Afasia</x:String>
+                            <x:String>Trastorno del lenguaje</x:String>
+                            <x:String>Mutismo selectivo</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
 
-                // Enviar los datos actualizados a la API
-                bool resultado = await _apiService.UpdatePacienteAsync(pacienteActualizado);
+                <Label Text="Teléfono adicional" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="telefonoAdicionalEntry" Placeholder="Nombre y teléfono" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
 
-                if (resultado)
-                {
-                    await DisplayAlert("Éxito", "Datos del paciente actualizados correctamente.", "OK");
-                }
-                else
-                {
-                    await DisplayAlert("Error", "No se pudieron actualizar los datos del paciente.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                await DisplayAlert("Error", $"Error al guardar los datos del paciente: {ex.Message}", "OK");
-            }
-        }
+                <Button Clicked="BtnPacientSave_Clicked" Text="Guardar" BackgroundColor="#846AFA" TextColor="Black" Margin="30" CornerRadius="10" Padding="5" HorizontalOptions="Fill" />
+            </VerticalStackLayout>
+        </ScrollView>
 
-        private async void OnMapaTapped(object sender, TappedEventArgs e)
-        {
-            Application.Current.MainPage = new InicioPage();
-        }
+        <!-- Barra inferior con fondo oscuro -->
+        <Grid Grid.Row="2" Padding="10">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="White" Offset="0.0"/>
+                    <GradientStop Color="#846AFA" Offset="0.3"/>
+                    <GradientStop Color="#846AFA" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
 
-        private async void OnHistorialTapped(object sender, TappedEventArgs e)
-        {
-            Application.Current.MainPage = new HistorialPage();
-        }
+            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="mapa_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMapaTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Mapa" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-        private async void OnManualTapped(object sender, TappedEventArgs e)
-        {
-            Application.Current.MainPage = new ManualPage();
-        }
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="historial_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHistorialTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Historial" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
 
-        private async void OnPacienteTapped(object sender, TappedEventArgs e)
-        {
-            Application.Current.MainPage = new MedicalPage();
-        }
-    }
-}
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="manual_sele.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnManualTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Ayuda" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center">
+                    <Image Source="paciente.png" HeightRequest="60" WidthRequest="50">
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPacienteTapped" />
+                        </Image.GestureRecognizers>
+                    </Image>
+                    <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
+            </HorizontalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>
