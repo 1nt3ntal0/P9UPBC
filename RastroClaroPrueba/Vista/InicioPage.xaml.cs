@@ -52,15 +52,11 @@ namespace RastroClaroPrueba.Vista
         {
             try
             {
-                // Obtener el ID del paciente desde SessionManager
                 int pacienteId = SessionManager.UserId;
-
-                // Obtener la última coordenada del paciente
                 var ultimaCoordenada = await _apiService.GetCoordenadasAsync(pacienteId);
 
                 if (ultimaCoordenada != null)
                 {
-                    // Actualizar el mapa con la última coordenada
                     UpdateMap(ultimaCoordenada.Latitude, ultimaCoordenada.Longitude);
                 }
                 else
