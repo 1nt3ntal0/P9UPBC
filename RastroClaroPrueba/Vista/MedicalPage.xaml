@@ -28,6 +28,13 @@
         <!-- Formulario Médico -->
         <ScrollView Grid.Row="1" Padding="10">
             <VerticalStackLayout Spacing="10">
+                <Button x:Name="btncerrar"
+                        Clicked="btncerrar_Clicked"
+                        Text="Cerrar sesión" 
+                        BackgroundColor="#846AFA" 
+                        TextColor="Black" 
+                        Margin="50" />
+                
                 <Label Text="Usuario" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
                 <Label Text="Nombre de usuario" TextColor="Black" FontAttributes="Bold" />
@@ -52,6 +59,8 @@
                        BackgroundColor="#846AFA" 
                        TextColor="Black" 
                        Margin="30" />
+               
+
 
                 <Label Text="Paciente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 

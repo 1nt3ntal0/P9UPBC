@@ -64,7 +64,7 @@ public partial class InicioPage : ContentPage
         var map = L.map('map').setView([{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}], 15);
         L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png').addTo(map);
         var marker = L.marker([{latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}, {longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}]).addTo(map);
-        marker.bindPopup('Última ubicación<br>Fecha: {fecha}').openPopup();
+        marker.bindPopup('Ubicación actual').openPopup();
     </script>
 </body>
 </html>";

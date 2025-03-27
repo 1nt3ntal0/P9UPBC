@@ -39,17 +39,13 @@ public partial class HistorialPage : ContentPage
 
     private async void OnManualTapped(object sender, TappedEventArgs e)
     {
-        //await Navigation.PushModalAsync(new ManualPage());
-        // Asegurarte de que hay más de una página en la pila de navegación
+      
         Application.Current.MainPage = new ManualPage();
-
 
     }
 
     private async void OnPacienteTapped(object sender, TappedEventArgs e)
     {
-        //await Navigation.PushAsync(new MedicalPage());
-        // Asegurarte de que hay más de una página en la pila de navegación
         Application.Current.MainPage = new MedicalPage();
 
     }

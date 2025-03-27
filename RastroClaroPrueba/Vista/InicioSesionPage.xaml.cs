@@ -11,6 +11,19 @@ namespace RastroClaroPrueba.Vista
         public InicioSesionPage()
         {
             InitializeComponent();
+            LoadUser();
+        }
+
+        private async void LoadUser()
+        {
+            var filepath = Path.Combine(FileSystem.AppDataDirectory, "Contrasena.txt");
+            if (File.Exists(filepath))
+            {
+                var login = await File.ReadAllTextAsync(filepath);
+                var parts = login.Split(',');
+                UserEntry.Text = parts[0];
+                PassEntry.Text = parts[1];
+            }
         }
 
         private void OnTogglePasswordClicked(object sender, EventArgs e)
@@ -35,6 +48,13 @@ namespace RastroClaroPrueba.Vista
 
             if (success)
             {
+                if(Checkrecuerdame.IsChecked)
+                {
+                    var filepath = Path.Combine(FileSystem.AppDataDirectory, "Contrasena.txt");
+                    var login = $"{usuario},{password}";
+                    await File.WriteAllTextAsync(filepath, login);
+
+                }
                 Application.Current.MainPage = new InicioPage();
             }
             else

@@ -65,7 +65,7 @@
             </Frame>
             <!-- Checkbox Recordar -->
             <HorizontalStackLayout HorizontalOptions="Start" Spacing="5">
-                <CheckBox BackgroundColor="Transparent" Color="Black"/>
+                <CheckBox x:Name="Checkrecuerdame" BackgroundColor="Transparent" Color="Black"/>
                 <!-- Color transparente para el fondo y negro para la flecha -->
                 <Label Text="Recordar" VerticalOptions="Center" FontSize="14"/>
             </HorizontalStackLayout>

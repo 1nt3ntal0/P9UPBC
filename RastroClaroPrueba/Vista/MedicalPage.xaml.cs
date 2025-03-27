@@ -107,12 +107,18 @@ namespace RastroClaroPrueba.Vista
 
         private void OnManualTapped(object sender, TappedEventArgs e)
         {
-            // Implementar cuando exista la página
+            Application.Current.MainPage = new ManualPage();
         }
 
         private void OnPacienteTapped(object sender, TappedEventArgs e)
         {
             Application.Current.MainPage = new MedicalPage();
         }
+
+        private void btncerrar_Clicked(object sender, EventArgs e)
+        {
+            SessionManager.ClearSession();
+            Application.Current.MainPage = new InicioSesionPage();
+        }
     }
-}////
+}
