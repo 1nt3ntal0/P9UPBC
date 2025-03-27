@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace RastroClaroPrueba.Models
 {
-    internal class coordenadas
+    public class coordenadas
     {
-        //public string id { get; set; }
-        public string latitude { get; set; }
-        public string longitude { get; set; }
-        public string paciente_id { get; set; }
-        public string fecha { get; set; }
+        public int Id { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public int PacienteId { get; set; }
+        public string Fecha { get; set; }
     }
 }

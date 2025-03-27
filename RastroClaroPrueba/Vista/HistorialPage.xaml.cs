@@ -1,7 +1,5 @@
-using System;
-using System.IO;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Storage;
+using RastroClaroPrueba.Utils;
+
 namespace RastroClaroPrueba.Vista;
 
 public partial class HistorialPage : ContentPage

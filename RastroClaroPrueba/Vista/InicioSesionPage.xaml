@@ -32,6 +32,7 @@
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="usuario.png" WidthRequest="20" HeightRequest="20"/>
                     <Entry x:Name="UserEntry"
+                           WidthRequest="260"
                         Placeholder="Usuario" 
                         FontSize="16"
                         Keyboard="Text"
@@ -46,6 +47,7 @@
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="Contrasena.png" WidthRequest="20" HeightRequest="20"/>
                     <Entry x:Name="PassEntry"
+                           WidthRequest="230"
                         Placeholder="Contraseña" 
                         IsPassword="True"
                         FontSize="16"

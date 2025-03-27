@@ -1,54 +1,236 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using RastroClaroPrueba.Utils;
+using RastroClaroPrueba.Models;
+using System.Diagnostics;
+using Microsoft.Maui.Graphics;
 
-namespace RastroClaroPrueba.Models
+namespace RastroClaroPrueba.Services
 {
     public class ApiService
     {
         private readonly HttpClient _httpClient;
+        private const string BaseApiUrl = "http://127.0.0.1:5000";
 
         public ApiService()
         {
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://127.0.0.1:5000"); // Cambia esto por la URL de tu API///SE VA A IP DE LA RASPBERRY
-            _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(BaseApiUrl),
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+            _httpClient.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        // Método para iniciar sesión y obtener el token JWT
-        public async Task<string> LoginAsync(string username, string password)
+        public async Task<(bool success, string message)> LoginAsync(string username, string password)
         {
-            var data = new { username, password };
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync("login", content);
-            return await response.Content.ReadAsStringAsync();
+            try
+            {
+                var loginData = new { username, password };
+                var content = new StringContent(
+                    JsonSerializer.Serialize(loginData),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PostAsync("login", content);
+
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    using (JsonDocument doc = JsonDocument.Parse(jsonResponse))
+                    {
+                        var root = doc.RootElement;
+
+                        if (root.TryGetProperty("id", out var idElement) &&
+                            root.TryGetProperty("access_token", out var tokenElement))
+                        {
+                            SessionManager.UserId = idElement.GetInt32();
+                            SessionManager.Token = tokenElement.GetString();
+                            SetAuthToken(SessionManager.Token);
+                            return (true, "Login exitoso");
+                        }
+                    }
+                    return (false, "Respuesta inválida del servidor");
+                }
+
+                if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    return (false, "Credenciales incorrectas");
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    return (false, "Usuario y contraseña son requeridos");
+
+                return (false, $"Error: {jsonResponse}");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error de conexión: {ex.Message}");
+            }
         }
 
-        // Método para actualizar un paciente
-        public async Task<string> UpdatePacienteAsync(int fkId, string nombre, int? edad = null, string religion = null,
-            string grado = null, string extra = null, string telefono = null)
+        public async Task<usuarios> GetUserAsync(int userId)
         {
-            var data = new { FkID = fkId, nombre, edad, religion, Grado = grado, Extra = extra, Telefono = telefono };
-            var content = new StringContent(JsonSerializer.Serialize(data), Encoding.UTF8, "application/json");
-            var response = await _httpClient.PutAsync("update_paciente", content);
-            return await response.Content.ReadAsStringAsync();
+            try
+            {
+                var response = await _httpClient.GetAsync($"users/{userId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<usuarios>(json);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error al obtener usuario: {ex.Message}");
+                return null;
+            }
         }
 
-       // Método para obtener coordenadas de un paciente
-        public async Task<string> GetCoordenadasAsync(int pacienteId)
+        public async Task<(bool success, string message)> UpdateUserAsync(usuarios user)
         {
-            var response = await _httpClient.GetAsync($"get_coordenadas?paciente_id={pacienteId}");
-            return await response.Content.ReadAsStringAsync();
+            try
+            {
+                var content = new StringContent(
+                    JsonSerializer.Serialize(user),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PutAsync("update_user", content);
+
+                if (response.IsSuccessStatusCode)
+                    return (true, "Usuario actualizado correctamente");
+
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return (false, $"Error al actualizar usuario: {errorMessage}");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error de conexión: {ex.Message}");
+            }
         }
 
-        // Método para establecer el token JWT en las cabeceras de las solicitudes
-        public void SetAuthToken(string token)
+        public async Task<pacientes> GetPatientAsync(int userId)
         {
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            try
+            {
+                var response = await _httpClient.GetAsync($"patients/{userId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<pacientes>(json);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error al obtener paciente: {ex.Message}");
+                return null;
+            }
+        }
+
+        public async Task<(bool success, string message)> UpdatePatientAsync(pacientes patient)
+        {
+            try
+            {
+                var content = new StringContent(
+                    JsonSerializer.Serialize(patient),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PutAsync("update_patient", content);
+
+                if (response.IsSuccessStatusCode)
+                    return (true, "Paciente actualizado correctamente");
+
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return (false, $"Error al actualizar paciente: {errorMessage}");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error de conexión: {ex.Message}");
+            }
+        }
+
+        public async Task<coordenadas> GetUltimaCoordenadaAsync(int pacienteId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"latest_coordinates/{pacienteId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return CreateDefaultCoordenada(pacienteId);
+
+                var json = await response.Content.ReadAsStringAsync();
+
+                using (JsonDocument doc = JsonDocument.Parse(json))
+                {
+                    var root = doc.RootElement;
+
+                    return new coordenadas
+                    {
+                        Latitude = root.GetProperty("latitude").GetDouble(),
+                        Longitude = root.GetProperty("longitude").GetDouble(),
+                        PacienteId = pacienteId,
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error al obtener coordenadas: {ex.Message}");
+                return CreateDefaultCoordenada(pacienteId);
+            }
+        }
+
+        public async Task<(bool success, string message)> AddCoordinatesAsync(int patientId, double latitude, double longitude)
+        {
+            try
+            {
+                var coordinateData = new
+                {
+                    patient_id = patientId,
+                    latitude = latitude.ToString(CultureInfo.InvariantCulture),
+                    longitude = longitude.ToString(CultureInfo.InvariantCulture)
+                };
+
+                var content = new StringContent(
+                    JsonSerializer.Serialize(coordinateData),
+                    Encoding.UTF8,
+                    "application/json");
+
+                var response = await _httpClient.PostAsync("add_coordinates", content);
+
+                if (response.IsSuccessStatusCode)
+                    return (true, "Coordenadas agregadas correctamente");
+
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                return (false, $"Error al agregar coordenadas: {errorMessage}");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error de conexión: {ex.Message}");
+            }
+        }
+
+        private coordenadas CreateDefaultCoordenada(int pacienteId)
+        {
+            return new coordenadas
+            {
+                Id = 0,
+                Latitude = 0,
+                Longitude = 0,
+                PacienteId = pacienteId,
+                Fecha = "No hay datos disponibles"
+            };
+        }
+
+        private void SetAuthToken(string token)
+        {
+            _httpClient.DefaultRequestHeaders.Authorization =
+                string.IsNullOrEmpty(token) ? null :
+                new AuthenticationHeaderValue("Bearer", token);
         }
     }
 }

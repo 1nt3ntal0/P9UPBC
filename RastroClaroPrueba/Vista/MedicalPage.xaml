@@ -4,7 +4,6 @@
              x:Class="RastroClaroPrueba.Vista.MedicalPage"
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="White">
-    <!-- Ahora el fondo de la página es blanco -->
 
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Barra superior con degradado -->
@@ -32,35 +31,63 @@
                 <Label Text="Usuario" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
                 <Label Text="Nombre de usuario" TextColor="Black" FontAttributes="Bold" />
-                <Entry FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
-
-                <Label Text="Correo" TextColor="Black" FontAttributes="Bold" />
-                <Entry FontSize="14" Keyboard="Numeric" BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="nombreUsuarioEntry"
+                       Text="{Binding Usuario.Username, Mode=TwoWay}" 
+                       FontSize="14" 
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
                 <Label Text="Contraseña" TextColor="Black" FontAttributes="Bold" />
-                <Entry Placeholder="Cambiar contraseña" FontSize="14"  BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="contrasenaEntry"
+                       Text="{Binding Usuario.Password, Mode=TwoWay}" 
+                       Placeholder="Cambiar contraseña" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" 
+                       IsPassword="True"/>
 
-                <Button Clicked="BtnUserSave_Clicked" Text="Guardar cambios" BackgroundColor="#846AFA" TextColor="Black" Margin="30"  />
+                <Button x:Name="btnUserSave"
+                       Clicked="BtnUserSave_Clicked"
+                       Text="Guardar cambios" 
+                       BackgroundColor="#846AFA" 
+                       TextColor="Black" 
+                       Margin="30" />
 
                 <Label Text="Paciente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
                 <Label Text="Nombre del paciente" TextColor="Black" FontAttributes="Bold" />
-                <Entry Placeholder="Ingrese el nombre" FontSize="14"  BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="nombrePacienteEntry"
+                       Text="{Binding Paciente.name, Mode=TwoWay}" 
+                       Placeholder="Ingrese el nombre" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
-                <Label Text="Fecha de nacimiento" TextColor="Black" FontAttributes="Bold" />
-                <DatePicker 
-                    Format="dd/MM/yyyy" 
-                    TextColor="Black" 
-                    BackgroundColor="#c5f6ff"
-                    FontSize="14"
-                    HorizontalOptions="FillAndExpand"/>
-                
+                <Label Text="Edad" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="edadEntry"
+                       Text="{Binding Paciente.age, Mode=TwoWay}" 
+                       Placeholder="Ingrese la edad" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black"
+                       Keyboard="Numeric"/>
 
-                    <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
-                <Entry Placeholder="Ingrese el teléfono" FontSize="14" Keyboard="Telephone"   BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
+                <Entry x:Name="telefonoEntry"
+                       Text="{Binding Paciente.phone, Mode=TwoWay}" 
+                       Placeholder="Ingrese el teléfono" 
+                       FontSize="14" 
+                       Keyboard="Telephone"   
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
                 <Label Text="Tipo de sangre" TextColor="Black" FontAttributes="Bold" />
-                <Picker x:Name="sangre" Title="Seleccione un tipo de sangre" Background="#c5f6ff" TextColor="Black" FontSize="14">
+                <Picker x:Name="tipoSangrePicker"
+                       SelectedIndex="{Binding Paciente.blood_type, Mode=TwoWay}"
+                       Title="Seleccione un tipo de sangre" 
+                       Background="#c5f6ff" 
+                       TextColor="Black" 
+                       FontSize="14">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>A+</x:String>
@@ -76,10 +103,20 @@
                 </Picker>
 
                 <Label Text="Religión" TextColor="Black" FontAttributes="Bold" />
-                <Entry Placeholder="Ingrese la religión" FontSize="14"  BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="religionEntry"
+                       Text="{Binding Paciente.religion, Mode=TwoWay}" 
+                       Placeholder="Ingrese la religión" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
                 <Label Text="Grado de Alzheimer" TextColor="Black" FontAttributes="Bold" />
-                <Picker Title="Seleccione un grado" FontSize="14" Background="#c5f6ff" TextColor="Black" >
+                <Picker x:Name="gradoPicker"
+                       SelectedIndex="{Binding Paciente.grade, Mode=TwoWay}"
+                       Title="Seleccione un grado" 
+                       FontSize="14" 
+                       Background="#c5f6ff" 
+                       TextColor="Black">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Inicial</x:String>
@@ -90,7 +127,12 @@
                 </Picker>
 
                 <Label Text="Dificultad de comunicación" TextColor="Black" FontAttributes="Bold" />
-                <Picker x:Name="dificultadComunicacion" Title="Seleccione una dificultad" Background="#c5f6ff" FontSize="14" TextColor="Black">
+                <Picker x:Name="dificultadPicker"
+                       SelectedIndex="{Binding Paciente.extra, Mode=TwoWay}"
+                       Title="Seleccione una dificultad" 
+                       Background="#c5f6ff" 
+                       FontSize="14" 
+                       TextColor="Black">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Ninguna</x:String>
@@ -104,10 +146,12 @@
                     </Picker.ItemsSource>
                 </Picker>
 
-                <Label Text="Teléfono adicional" TextColor="Black" FontAttributes="Bold" />
-                <Entry Placeholder="Nombre y teléfono" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
-
-                <Button Clicked="BtnPacientSave_Clicked" Text="Guardar" BackgroundColor="#846AFA" TextColor="Black" Margin="30" />
+                <Button x:Name="btnPacientSave"
+                       Clicked="BtnPacientSave_Clicked"
+                       Text="Guardar" 
+                       BackgroundColor="#846AFA" 
+                       TextColor="Black" 
+                       Margin="30" />
             </VerticalStackLayout>
         </ScrollView>
 
@@ -120,7 +164,6 @@
                     <GradientStop Color="#846AFA" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
-
 
             <HorizontalStackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="Center" Spacing="20">
                 <StackLayout HorizontalOptions="Center">
@@ -159,7 +202,6 @@
                     <Label Text="Paciente" FontSize="14" TextColor="Black" HorizontalOptions="Center"/>
                 </StackLayout>
             </HorizontalStackLayout>
-
         </Grid>
     </Grid>
 </ContentPage>

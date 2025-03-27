@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace RastroClaroPrueba.Models
 {
-    internal class usuarios
+    public class usuarios
     {
-        public string Id { get; set; }
-        public string Usuario { get; set; }
+        public int Id { get; set; } 
+        public string Username { get; set; } 
         public string Password { get; set; }
-        public string pacientes { get; set; }
-        public string correo { get; set; }
-
+        public pacientes Paciente { get; set; }
     }
 }

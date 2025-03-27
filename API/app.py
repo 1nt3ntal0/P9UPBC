@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD
 app.config['SECRET_KEY'] = 'mysecretkey'
 db = SQLAlchemy(app)
 
+<<<<<<< Updated upstream
 # Modelo de la tabla 'usuarios'
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
@@ -38,6 +39,30 @@ class Paciente(db.Model):
     Telefono = db.Column(db.String(15))
     coordenadas = db.relationship('Coordenada', backref='paciente', lazy=True)
 
+=======
+
+# Modelo de la tabla 'usuarios'
+class Usuario(db.Model):
+    __tablename__ = 'usuarios'
+    Id = db.Column(db.Integer, primary_key=True)
+    Usuario = db.Column(db.String(80), unique=True, nullable=False)
+    Password = db.Column(db.String(120), nullable=False)
+    pacientes = db.relationship('Paciente', backref='owner', lazy=True)
+
+# Modelo de la tabla 'paciente'
+class Paciente(db.Model):
+    __tablename__ = 'paciente'
+    FkID = db.Column(db.Integer, db.ForeignKey('usuarios.Id'), primary_key=True, nullable=False)
+    nombre = db.Column(db.String(100), primary_key=True, nullable=False)
+    edad = db.Column(db.Integer, nullable=False)
+    sangre = db.Column(db.String(10))
+    religion = db.Column(db.String(50))
+    Grado = db.Column(db.String(50))
+    Extra = db.Column(db.Text)
+    Telefono = db.Column(db.String(15))
+    coordenadas = db.relationship('Coordenada', backref='paciente', lazy=True)
+
+>>>>>>> Stashed changes
 # Modelo de la tabla 'coordenadas'
 class Coordenada(db.Model):
     __tablename__ = 'coordenadas'
@@ -50,7 +75,10 @@ class Coordenada(db.Model):
 with app.app_context():
     db.create_all()
 
+<<<<<<< Updated upstream
 # Endpoints relacionados con usuarios
+=======
+>>>>>>> Stashed changes
 @app.route('/register', methods=['POST'])  # CREATE: Registrar un nuevo usuario
 def register():
     data = request.json
@@ -84,7 +112,11 @@ def login():
     )
     return jsonify({'access_token': token})
 
+<<<<<<< Updated upstream
 # Endpoints relacionados con pacientes
+=======
+
+>>>>>>> Stashed changes
 @app.route('/add_paciente', methods=['POST'])  # CREATE: Agregar un paciente
 def add_paciente():
     data = request.json
@@ -149,7 +181,10 @@ def delete_paciente():
     db.session.commit()
     return jsonify({'message': 'Paciente eliminado exitosamente'})
 
+<<<<<<< Updated upstream
 # Endpoints relacionados con coordenadas
+=======
+>>>>>>> Stashed changes
 @app.route('/add_coordenadas', methods=['POST'])  # CREATE: Agregar coordenadas
 def add_coordenadas():
     data = request.json
@@ -191,6 +226,5 @@ def get_coordenadas():
     ]
     return jsonify(coordenadas_json)
 
-# Ejecutar la aplicación
 if __name__ == '__main__':
     app.run(debug=True)
