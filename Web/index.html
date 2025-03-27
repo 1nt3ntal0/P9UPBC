@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../../../favicon.ico">
+
+    <title>Signin Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/signin.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/styles.css" rel="stylesheet">
+
+    <script>
+      async function login(event) {
+        event.preventDefault(); // Evitar el envío del formulario
+
+        // Obtener los valores del formulario
+        const id = document.getElementById('inputId').value;
+        const password = document.getElementById('inputPassword').value;
+
+        // Hacer la solicitud GET al endpoint de la API para verificar si el cliente existe
+        try {
+          const response = await fetch(`http://127.0.0.1:5000/clientes/${id}`);
+
+          if (response.ok) {
+            // Si el cliente existe, redirigir a Home.html
+            window.location.href = 'Home.html';
+          } else {
+            const data = await response.json();
+            alert(data.message || 'Error al iniciar sesión');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Hubo un problema con la solicitud');
+        }
+      }
+    </script>
+  </head>
+
+  <body class="text-center">
+    <form class="form-signin" onsubmit="login(event)">
+      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Inicio de sesión</h1>
+
+      <!-- Campo para el ID -->
+      <label for="inputId" class="sr-only">ID</label>
+      <input type="text" id="inputId" class="form-control" placeholder="ID del Cliente" required autofocus>
+
+      <!-- Campo para la contraseña -->
+      <label for="inputPassword" class="sr-only">Contraseña</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Recordarme
+        </label>
+      </div>
+      
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+    </form>
+  </body>
+</html>
