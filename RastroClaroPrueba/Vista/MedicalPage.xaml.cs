@@ -103,6 +103,7 @@ namespace RastroClaroPrueba.Vista
         private void OnHistorialTapped(object sender, TappedEventArgs e)
         {
             Application.Current.MainPage = new HistorialPage();
+
         }
 
         private void OnManualTapped(object sender, TappedEventArgs e)
