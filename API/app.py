@@ -11,6 +11,7 @@ app = Flask(__name__)
 # Habilitar CORS para todas las rutas
 CORS(app)
 
+
 # Configuración de la base de datos
 DB_USER = os.getenv('DB_USER', 'root')
 DB_PASSWORD = os.getenv('DB_PASSWORD', '')
