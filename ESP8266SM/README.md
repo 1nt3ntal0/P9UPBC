@@ -1,35 +1,33 @@
-El objetivo es simular el envío de coordenadas geográficas (latitud y longitud) desde el dispositivo móvil a una API Python a través de una conexión HTTP, emulando el comportamiento del ESP8266 al enviar datos.
+# Proyecto API - Envío de Coordenadas
 
-Componentes Clave de la Simulación:
-Obtención de Coordenadas Geográficas
+Este proyecto proporciona una API para gestionar usuarios, pacientes y sus coordenadas geográficas, diseñada para ser utilizada por una aplicación móvil que envía datos de ubicación de pacientes con Alzheimer a través de un servidor.
 
-Se utiliza la API de Geolocalización de .NET MAUI para obtener las coordenadas del dispositivo móvil (latitud y longitud) en tiempo real.
+## Requisitos
 
-Si la ubicación está disponible en el dispositivo, se obtiene la última ubicación conocida usando Geolocation.GetLastKnownLocationAsync().
+Asegúrate de tener las siguientes librerías instaladas:
 
-Si no está disponible, la aplicación solicita una ubicación actualizada utilizando Geolocation.GetLocationAsync(), lo que permite obtener la ubicación con la precisión configurada.
+```bash
+pip install pymysql
+pip install flask
+pip install flask-sqlalchemy
+pip install werkzeug
+pip install pyjwt
+pip install flask-migrate
+pip install flask-cors
 
-Formato de Datos
+Enviar coordenadas a la API en Python
+La aplicación en .NET MAUI enviará coordenadas a la API en Python, que las recibirá y procesará según las especificaciones.
 
-Una vez obtenidas las coordenadas, estos datos se empaquetan en un objeto JSON para enviarlos de manera estructurada a la API. El objeto JSON contiene:
+Descripción de las funciones del código
+StartSendingCoordinates()
+Inicia el envío de coordenadas a la API de forma periódica (cada 5 segundos).
 
-latitude: la latitud del dispositivo.
+EnviarCoordenadas()
+Obtiene las coordenadas GPS del dispositivo móvil utilizando la API de geolocalización de .NET MAUI.
 
-longitude: la longitud del dispositivo.
+Si la ubicación no está disponible, obtiene una nueva ubicación en tiempo real.
 
-paciente_id: identificador de la persona asociada con la coordenada (puede ser un identificador de base de datos o un número de paciente).
-
-Envío de Datos a la API
-
-Los datos serializados en JSON se envían a la API utilizando un POST HTTP.
-
-Para ello, se utiliza la clase HttpClient de .NET, que permite realizar solicitudes HTTP. La URL de la API está configurada en el proyecto.
-
-En este caso, la API se simula como una API en Python (Flask, por ejemplo) que recibe las coordenadas y realiza algún procesamiento con ellas (almacenarlas, enviarlas a una base de datos, etc.).
-
-Manejo de Respuestas
-
-Una vez que se realiza la solicitud, se maneja la respuesta de la API:
+Envía las coordenadas como JSON a la API en Python utilizando una solicitud HTTP POST.
 
 Si la solicitud es exitosa (código HTTP 200), se muestra un mensaje de éxito con los datos enviados.
 
