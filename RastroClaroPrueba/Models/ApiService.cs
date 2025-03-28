@@ -5,7 +5,6 @@ using System.Text.Json;
 using RastroClaroPrueba.Utils;
 using RastroClaroPrueba.Models;
 using System.Diagnostics;
-using Microsoft.Maui.Graphics;
 
 namespace RastroClaroPrueba.Services
 {
@@ -213,6 +212,46 @@ namespace RastroClaroPrueba.Services
                 return (false, $"Error de conexión: {ex.Message}");
             }
         }
+        public async Task<List<List<List<double>>>> GetCoordinates(int patientId)
+        {
+            string url = $"http://127.0.0.1:5000/coordinates/{patientId}";
+            var response = await _httpClient.GetStringAsync(url);
+
+            var coordenadas = JsonSerializer.Deserialize<List<coordenadas>>(response);
+
+            var rutas = new List<List<List<double>>>();
+
+
+            var ruta = new List<List<double>>();
+            int contador = 0;
+
+            foreach (var c in coordenadas)
+            {
+                // Crear una lista con las coordenadas de tipo [latitude, longitude]
+                var coordenada = new List<double> { c.Latitude, c.Longitude };
+
+                // Agregar la coordenada a la ruta
+                ruta.Add(coordenada);
+                contador++;
+
+                // Agrupar cada 3 coordenadas como una ruta
+                if (contador == 3)
+                {
+                    rutas.Add(ruta);
+                    ruta = new List<List<double>>(); // Reiniciar la ruta
+                    contador = 0; // Reiniciar el contador
+                }
+            }
+
+            // Si queda alguna coordenada sin agrupar, agregarla a la última ruta
+            if (ruta.Count > 0)
+            {
+                rutas.Add(ruta);
+            }
+
+            return rutas;
+        }
+
 
         private coordenadas CreateDefaultCoordenada(int pacienteId)
         {

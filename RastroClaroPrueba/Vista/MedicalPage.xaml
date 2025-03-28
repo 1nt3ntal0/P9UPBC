@@ -31,8 +31,8 @@
                 <Button x:Name="btncerrar"
                         Clicked="btncerrar_Clicked"
                         Text="Cerrar sesión" 
-                        BackgroundColor="#846AFA" 
-                        TextColor="Black" 
+                        BackgroundColor="Black" 
+                        TextColor="White" 
                         Margin="50" />
                 
                 <Label Text="Usuario" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
@@ -62,7 +62,10 @@
                
 
 
-                <Label Text="Paciente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+                <Label Text="Paciente" FontSize="20" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" 
+                       TextColor="Black"/>
 
                 <Label Text="Nombre del paciente" TextColor="Black" FontAttributes="Bold" />
                 <Entry x:Name="nombrePacienteEntry"
@@ -72,14 +75,16 @@
                        BackgroundColor="#c5f6ff" 
                        TextColor="Black" />
 
-                <Label Text="Edad" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="edadEntry"
-                       Text="{Binding Paciente.age, Mode=TwoWay}" 
-                       Placeholder="Ingrese la edad" 
-                       FontSize="14"  
-                       BackgroundColor="#c5f6ff" 
-                       TextColor="Black"
-                       Keyboard="Numeric"/>
+                <Label Text="Fecha de nacimiento" 
+                       TextColor="Black" 
+                       FontAttributes="Bold" />
+                <DatePicker x:Name="fechaNacimientoDatePicker" 
+                            Format="dd/MM/yyyy" 
+                            TextColor="Black" 
+                            BackgroundColor="#c5f6ff" 
+                            FontSize="14" 
+                            HorizontalOptions="FillAndExpand" />
+
 
                 <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
                 <Entry x:Name="telefonoEntry"

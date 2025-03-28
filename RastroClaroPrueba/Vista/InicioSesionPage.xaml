@@ -84,14 +84,14 @@
 
 
             <!-- Botón Adquirir producto -->
-            <Button Text="Adquidir Producto"
+            <!--<Button Text="Adquidir Producto"
                  BackgroundColor="White"
                  TextColor="Black"
                  FontSize="16"
                  CornerRadius="10"
                  Padding="5"
                  HorizontalOptions="Fill"
-                    Clicked="BtnProducto_Clicked"/>
+                     Clicked="BtnProducto_Clicked"/>--> 
 
         </VerticalStackLayout>
     </ScrollView>
