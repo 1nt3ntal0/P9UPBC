@@ -1,3 +1,4 @@
+# Importaciones
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -5,6 +6,7 @@ import jwt
 import datetime
 import os
 
+# Configuración inicial de la aplicación
 app = Flask(__name__)
 
 # Configuración de la base de datos
@@ -17,178 +19,240 @@ app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD
 app.config['SECRET_KEY'] = 'mysecretkey'
 db = SQLAlchemy(app)
 
-
-# Modelo de la tabla 'usuarios'
-class Usuario(db.Model):
-    __tablename__ = 'usuarios'
+# Modelos de la base de datos
+class User(db.Model):
+    __tablename__ = 'users'
     Id = db.Column(db.Integer, primary_key=True)
-    Usuario = db.Column(db.String(80), unique=True, nullable=False)
+    Username = db.Column(db.String(80), unique=True, nullable=False)
     Password = db.Column(db.String(120), nullable=False)
-    pacientes = db.relationship('Paciente', backref='owner', lazy=True)
+    patients = db.relationship('Patient', backref='owner', lazy=True)
 
-# Modelo de la tabla 'paciente'
-class Paciente(db.Model):
-    __tablename__ = 'paciente'
-    FkID = db.Column(db.Integer, db.ForeignKey('usuarios.Id'), primary_key=True, nullable=False)
-    nombre = db.Column(db.String(100), primary_key=True, nullable=False)
-    edad = db.Column(db.Integer, nullable=False)
-    sangre = db.Column(db.String(10))
+class Patient(db.Model):
+    __tablename__ = 'patient'
+    FkID = db.Column(db.Integer, db.ForeignKey('users.Id'), primary_key=True, nullable=False)
+    name = db.Column(db.String(100), primary_key=True, nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    blood_type = db.Column(db.Integer)
     religion = db.Column(db.String(50))
-    Grado = db.Column(db.String(50))
-    Extra = db.Column(db.Text)
-    Telefono = db.Column(db.String(15))
-    coordenadas = db.relationship('Coordenada', backref='paciente', lazy=True)
+    grade = db.Column(db.Integer)
+    extra = db.Column(db.Integer)
+    phone = db.Column(db.String(15))
 
-# Modelo de la tabla 'coordenadas'
-class Coordenada(db.Model):
-    __tablename__ = 'coordenadas'
+class Coordinate(db.Model):
+    __tablename__ = 'coordinates'
     id = db.Column(db.Integer, primary_key=True)
     latitude = db.Column(db.String(50), nullable=False)
     longitude = db.Column(db.String(50), nullable=False)
-    paciente_id = db.Column(db.Integer, db.ForeignKey('paciente.FkID'), nullable=False)
+    patient_id = db.Column(db.Integer, db.ForeignKey('patient.FkID'), nullable=False)
 
-# Crear todas las tablas en la base de datos
+# Crear tablas en la base de datos
 with app.app_context():
     db.create_all()
 
-@app.route('/register', methods=['POST'])  # CREATE: Registrar un nuevo usuario
+# Endpoints de autenticación y usuarios
+@app.route('/register', methods=['POST'])
 def register():
     data = request.json
     if not data.get('username') or not data.get('password'):
-        return jsonify({'message': 'Se requieren el nombre de usuario y la contraseña'}), 400
-
-    # Verificar si el usuario ya existe
-    if Usuario.query.filter_by(Usuario=data['username']).first():
-        return jsonify({'message': 'El nombre de usuario ya está en uso'}), 400
-
+        return jsonify({'message': 'Username and password are required'}), 400
+    if User.query.filter_by(Username=data['username']).first():
+        return jsonify({'message': 'Username already exists'}), 400
+    
     hashed_password = generate_password_hash(data['password'], method='pbkdf2:sha256')
-    new_user = Usuario(Usuario=data['username'], Password=hashed_password)
+    new_user = User(Username=data['username'], Password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message': 'Usuario creado exitosamente', 'id': new_user.Id}), 201
+    return jsonify({'message': 'User created successfully', 'id': new_user.Id}), 201
 
-@app.route('/login', methods=['POST'])  # LOGIN: Iniciar sesión y obtener token
+@app.route('/login', methods=['POST'])
 def login():
     data = request.json
     if not data.get('username') or not data.get('password'):
-        return jsonify({'message': 'Se requieren el nombre de usuario y la contraseña'}), 400
-
-    user = Usuario.query.filter_by(Usuario=data['username']).first()
+        return jsonify({'message': 'Username and password are required'}), 400
+    
+    user = User.query.filter_by(Username=data['username']).first()
     if not user or not check_password_hash(user.Password, data['password']):
-        return jsonify({'message': 'Credenciales inválidas'}), 401
-
+        return jsonify({'message': 'Invalid credentials'}), 401
+    
     token = jwt.encode(
-        {'sub': user.Usuario, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
+        {'sub': user.Username, 'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)},
         app.config['SECRET_KEY'],
         algorithm='HS256'
     )
-    return jsonify({'access_token': token})
+    return jsonify({'id': user.Id, 'access_token': token})
 
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    return jsonify({
+        'Id': user.Id,
+        'Username': user.Username
+    })
 
-@app.route('/add_paciente', methods=['POST'])  # CREATE: Agregar un paciente
-def add_paciente():
+@app.route('/update_user', methods=['PUT'])
+def update_user():
     data = request.json
-    if not data.get('FkID') or not data.get('nombre') or not data.get('edad'):
-        return jsonify({'message': 'Se requieren FkID, nombre y edad'}), 400
+    user = User.query.get(data.get('Id'))
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    
+    if 'Username' in data:
+        user.Username = data['Username']
+    if 'Password' in data:
+        user.Password = generate_password_hash(data['Password'])
+    
+    db.session.commit()
+    return jsonify({'message': 'User updated successfully'})
 
-    # Verificar si el FkID existe en la tabla de usuarios
-    usuario_existente = Usuario.query.get(data['FkID'])
-    if not usuario_existente:
-        return jsonify({'message': 'El FkID no existe en la tabla de usuarios'}), 404
+# Endpoints de pacientes
+@app.route('/patients/<int:user_id>', methods=['GET'])
+def get_patient(user_id):
+    patient = Patient.query.filter_by(FkID=user_id).first()
+    if not patient:
+        return jsonify({'message': 'Patient not found'}), 404
+    
+    return jsonify({
+        'FkID': patient.FkID,
+        'name': patient.name,
+        'age': patient.age,
+        'blood_type': patient.blood_type,
+        'religion': patient.religion,
+        'grade': patient.grade,
+        'extra': patient.extra,
+        'phone': patient.phone
+    })
 
-    new_paciente = Paciente(
+@app.route('/add_patient', methods=['POST'])
+def add_patient():
+    data = request.json
+    if not data.get('FkID') or not data.get('name') or not data.get('age'):
+        return jsonify({'message': 'FkID, name and age are required'}), 400
+    
+    existing_user = User.query.get(data['FkID'])
+    if not existing_user:
+        return jsonify({'message': 'User not found'}), 404
+    
+    new_patient = Patient(
         FkID=data['FkID'],
-        nombre=data['nombre'],
-        edad=data['edad'],
-        sangre=data.get('sangre'),
+        name=data['name'],
+        age=data['age'],
+        blood_type=data.get('blood_type'),
         religion=data.get('religion'),
-        Grado=data.get('Grado'),
-        Extra=data.get('Extra'),
-        Telefono=data.get('Telefono')
+        grade=data.get('grade'),
+        extra=data.get('extra'),
+        phone=data.get('phone')
     )
-    db.session.add(new_paciente)
+    db.session.add(new_patient)
     db.session.commit()
-    return jsonify({'message': 'Paciente agregado exitosamente'}), 201
+    return jsonify({'message': 'Patient added successfully'}), 201
 
-@app.route('/update_paciente', methods=['PUT'])  # UPDATE: Modificar un paciente
-def update_paciente():
+@app.route('/update_patient', methods=['PUT'])
+def update_patient():
     data = request.json
-    if not data.get('FkID') or not data.get('nombre'):
-        return jsonify({'message': 'Se requieren el ID del paciente y el nombre'}), 400
-
-    paciente = Paciente.query.filter_by(FkID=data['FkID'], nombre=data['nombre']).first()
-    if not paciente:
-        return jsonify({'message': 'Paciente no encontrado'}), 404
-
-    # Actualizar campos permitidos
-    if 'edad' in data:
-        paciente.edad = data['edad']
-    if 'religion' in data:
-        paciente.religion = data['religion']
-    if 'Grado' in data:
-        paciente.Grado = data['Grado']
-    if 'Extra' in data:
-        paciente.Extra = data['Extra']
-    if 'Telefono' in data:
-        paciente.Telefono = data['Telefono']
-
+    if not data.get('FkID') or not data.get('name'):
+        return jsonify({'message': 'FkID and name are required'}), 400
+    
+    patient = Patient.query.filter_by(FkID=data['FkID'], name=data['name']).first()
+    if not patient:
+        return jsonify({'message': 'Patient not found'}), 404
+    
+    if 'age' in data: patient.age = data['age']
+    if 'blood_type' in data: patient.blood_type = data['blood_type']
+    if 'religion' in data: patient.religion = data['religion']
+    if 'grade' in data: patient.grade = data['grade']
+    if 'extra' in data: patient.extra = data['extra']
+    if 'phone' in data: patient.phone = data['phone']
+    
     db.session.commit()
-    return jsonify({'message': 'Paciente actualizado exitosamente'})
+    return jsonify({'message': 'Patient updated successfully'})
 
-@app.route('/delete_paciente', methods=['DELETE'])  # DELETE: Eliminar un paciente
-def delete_paciente():
+@app.route('/delete_patient', methods=['DELETE'])
+def delete_patient():
     data = request.json
-    if not data.get('FkID') or not data.get('nombre'):
-        return jsonify({'message': 'Se requieren el ID del paciente y el nombre'}), 400
-
-    paciente = Paciente.query.filter_by(FkID=data['FkID'], nombre=data['nombre']).first()
-    if not paciente:
-        return jsonify({'message': 'Paciente no encontrado'}), 404
-
-    db.session.delete(paciente)
+    if not data.get('FkID') or not data.get('name'):
+        return jsonify({'message': 'FkID and name are required'}), 400
+    
+    patient = Patient.query.filter_by(FkID=data['FkID'], name=data['name']).first()
+    if not patient:
+        return jsonify({'message': 'Patient not found'}), 404
+    
+    db.session.delete(patient)
     db.session.commit()
-    return jsonify({'message': 'Paciente eliminado exitosamente'})
+    return jsonify({'message': 'Patient deleted successfully'})
 
-@app.route('/add_coordenadas', methods=['POST'])  # CREATE: Agregar coordenadas
-def add_coordenadas():
+# Endpoints de coordenadas
+@app.route('/latest_coordinates/<int:user_id>', methods=['GET'])
+def get_latest_coordinates(user_id):
+    try:
+        coordinate = Coordinate.query.filter_by(patient_id=user_id)\
+                                   .order_by(Coordinate.id.desc())\
+                                   .first()
+        
+        if not coordinate:
+            return jsonify({
+                'latitude': 0.0,
+                'longitude': 0.0
+            }), 200
+        
+        lat = float(coordinate.latitude)
+        lng = float(coordinate.longitude)
+        
+        return jsonify({
+            'latitude': lat,
+            'longitude': lng
+        })
+        
+    except Exception as e:
+        print(f"Error al obtener coordenadas: {str(e)}")
+        return jsonify({
+            'latitude': 0.0,
+            'longitude': 0.0
+        }), 200
+
+@app.route('/add_coordinates', methods=['POST'])
+def add_coordinates():
     data = request.json
-    if not data.get('latitude') or not data.get('longitude') or not data.get('paciente_id'):
-        return jsonify({'message': 'Se requieren latitude, longitude y paciente_id'}), 400
-
-    # Verificar si el paciente existe
-    paciente_existente = Paciente.query.get(data['paciente_id'])
-    if not paciente_existente:
-        return jsonify({'message': 'El paciente_id no existe en la tabla de pacientes'}), 404
-
-    new_coord = Coordenada(
+    if not data.get('latitude') or not data.get('longitude') or not data.get('patient_id'):
+        return jsonify({'message': 'Latitude, longitude and patient_id are required'}), 400
+    
+    patient = Patient.query.get(data['patient_id'])
+    if not patient:
+        return jsonify({'message': 'Patient not found'}), 404
+    
+    new_coordinate = Coordinate(
         latitude=data['latitude'],
         longitude=data['longitude'],
-        paciente_id=data['paciente_id']
+        patient_id=data['patient_id']
     )
-    db.session.add(new_coord)
+    db.session.add(new_coordinate)
     db.session.commit()
-    return jsonify({'message': 'Coordenadas agregadas exitosamente'}), 201
+    return jsonify({'message': 'Coordinates added successfully'}), 201
 
-@app.route('/get_coordenadas', methods=['GET'])  # GET: Obtener coordenadas de un paciente
-def get_coordenadas():
-    paciente_id = request.args.get('paciente_id')
-    if not paciente_id:
-        return jsonify({'message': 'Se requiere el ID del paciente'}), 400
+@app.route('/coordinates/<int:patient_id>', methods=['GET'])
+def get_coordinates(patient_id):
+    coordinates = Coordinate.query.filter_by(patient_id=patient_id).all()
+    if not coordinates:
+        return jsonify({'message': 'No coordinates found'}), 404
+    
+    return jsonify([{
+        'id': c.id,
+        'latitude': float(c.latitude),
+        'longitude': float(c.longitude),
+        'timestamp': c.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+    } for c in coordinates])
 
-    coordenadas = Coordenada.query.filter_by(paciente_id=paciente_id).all()
-    if not coordenadas:
-        return jsonify({'message': 'No se encontraron coordenadas para el paciente'}), 404
+@app.route('/delete_coordinate/<int:coord_id>', methods=['DELETE'])
+def delete_coordinate(coord_id):
+    coordinate = Coordinate.query.get(coord_id)
+    if not coordinate:
+        return jsonify({'message': 'Coordinate not found'}), 404
+    
+    db.session.delete(coordinate)
+    db.session.commit()
+    return jsonify({'message': 'Coordinate deleted successfully'})
 
-    coordenadas_json = [
-        {
-            'id': coord.id,
-            'latitude': coord.latitude,
-            'longitude': coord.longitude,
-            'paciente_id': coord.paciente_id
-        }
-        for coord in coordenadas
-    ]
-    return jsonify(coordenadas_json)
-
+# Punto de entrada de la aplicación
 if __name__ == '__main__':
     app.run(debug=True)
