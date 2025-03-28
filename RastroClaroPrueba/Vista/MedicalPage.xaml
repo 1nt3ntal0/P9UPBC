@@ -11,8 +11,8 @@
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#61D2E8" Offset="0.0"/>
-                    <GradientStop Color="#61D2E8" Offset="0.5"/>
-                    <GradientStop Color="Transparent" Offset="1.0"/>
+                    <GradientStop Color="#61D2E8" Offset="0.50"/>
+                    <GradientStop Color="White" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.ColumnDefinitions>
@@ -20,7 +20,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Información" FontSize="24" TextColor="Black" Margin="10" VerticalOptions="Center" FontAttributes="Bold" />
+                <Label Text="Información" FontSize="24" TextColor="Black" Margin="20" VerticalOptions="Center" FontAttributes="Bold" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
@@ -28,32 +28,80 @@
         <!-- Formulario Médico -->
         <ScrollView Grid.Row="1" Padding="10">
             <VerticalStackLayout Spacing="10">
+                <Button x:Name="btncerrar"
+                        Clicked="btncerrar_Clicked"
+                        Text="Cerrar sesión" 
+                        BackgroundColor="Black" 
+                        TextColor="White" 
+                        Margin="50" />
+                
                 <Label Text="Usuario" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
 
                 <Label Text="Nombre de usuario" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="nombreUsuarioEntry" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
-
-                <Label Text="Correo" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="correoEntry" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="nombreUsuarioEntry"
+                       Text="{Binding Usuario.Username, Mode=TwoWay}" 
+                       FontSize="14" 
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
                 <Label Text="Contraseña" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="passwordEntry" Placeholder="Cambiar contraseña" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" IsPassword="True" />
+                <Entry x:Name="contrasenaEntry"
+                       Text="{Binding Usuario.Password, Mode=TwoWay}" 
+                       Placeholder="Cambiar contraseña" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" 
+                       IsPassword="True"/>
 
-                <Button Clicked="BtnUserSave_Clicked" Text="Guardar cambios" BackgroundColor="#846AFA" TextColor="Black" Margin="30" CornerRadius="10" Padding="5" HorizontalOptions="Fill" />
+                <Button x:Name="btnUserSave"
+                       Clicked="BtnUserSave_Clicked"
+                       Text="Guardar cambios" 
+                       BackgroundColor="#846AFA" 
+                       TextColor="Black" 
+                       Margin="30" />
+               
 
-                <Label Text="Paciente" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
+
+                <Label Text="Paciente" FontSize="20" 
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" 
+                       TextColor="Black"/>
 
                 <Label Text="Nombre del paciente" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="nombrePacienteEntry" Placeholder="Ingrese el nombre" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="nombrePacienteEntry"
+                       Text="{Binding Paciente.name, Mode=TwoWay}" 
+                       Placeholder="Ingrese el nombre" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
-                <Label Text="Fecha de nacimiento" TextColor="Black" FontAttributes="Bold" />
-                <DatePicker x:Name="fechaNacimientoDatePicker" Format="dd/MM/yyyy" TextColor="Black" BackgroundColor="#c5f6ff" FontSize="14" HorizontalOptions="FillAndExpand" />
+                <Label Text="Fecha de nacimiento" 
+                       TextColor="Black" 
+                       FontAttributes="Bold" />
+                <DatePicker x:Name="fechaNacimientoDatePicker" 
+                            Format="dd/MM/yyyy" 
+                            TextColor="Black" 
+                            BackgroundColor="#c5f6ff" 
+                            FontSize="14" 
+                            HorizontalOptions="FillAndExpand" />
+
 
                 <Label Text="Teléfono de emergencia" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="telefonoEntry" Placeholder="Ingrese el teléfono" FontSize="14" Keyboard="Telephone" BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="telefonoEntry"
+                       Text="{Binding Paciente.phone, Mode=TwoWay}" 
+                       Placeholder="Ingrese el teléfono" 
+                       FontSize="14" 
+                       Keyboard="Telephone"   
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
                 <Label Text="Tipo de sangre" TextColor="Black" FontAttributes="Bold" />
-                <Picker x:Name="sangrePicker" Title="Seleccione un tipo de sangre" Background="#c5f6ff" TextColor="Black" FontSize="14">
+                <Picker x:Name="tipoSangrePicker"
+                       SelectedIndex="{Binding Paciente.blood_type, Mode=TwoWay}"
+                       Title="Seleccione un tipo de sangre" 
+                       Background="#c5f6ff" 
+                       TextColor="Black" 
+                       FontSize="14">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>A+</x:String>
@@ -69,10 +117,20 @@
                 </Picker>
 
                 <Label Text="Religión" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="religionEntry" Placeholder="Ingrese la religión" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
+                <Entry x:Name="religionEntry"
+                       Text="{Binding Paciente.religion, Mode=TwoWay}" 
+                       Placeholder="Ingrese la religión" 
+                       FontSize="14"  
+                       BackgroundColor="#c5f6ff" 
+                       TextColor="Black" />
 
                 <Label Text="Grado de Alzheimer" TextColor="Black" FontAttributes="Bold" />
-                <Picker x:Name="gradoPicker" Title="Seleccione un grado" FontSize="14" Background="#c5f6ff" TextColor="Black">
+                <Picker x:Name="gradoPicker"
+                       SelectedIndex="{Binding Paciente.grade, Mode=TwoWay}"
+                       Title="Seleccione un grado" 
+                       FontSize="14" 
+                       Background="#c5f6ff" 
+                       TextColor="Black">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Inicial</x:String>
@@ -83,7 +141,12 @@
                 </Picker>
 
                 <Label Text="Dificultad de comunicación" TextColor="Black" FontAttributes="Bold" />
-                <Picker x:Name="dificultadComunicacionPicker" Title="Seleccione una dificultad" Background="#c5f6ff" FontSize="14" TextColor="Black">
+                <Picker x:Name="dificultadPicker"
+                       SelectedIndex="{Binding Paciente.extra, Mode=TwoWay}"
+                       Title="Seleccione una dificultad" 
+                       Background="#c5f6ff" 
+                       FontSize="14" 
+                       TextColor="Black">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Ninguna</x:String>
@@ -97,10 +160,12 @@
                     </Picker.ItemsSource>
                 </Picker>
 
-                <Label Text="Teléfono adicional" TextColor="Black" FontAttributes="Bold" />
-                <Entry x:Name="telefonoAdicionalEntry" Placeholder="Nombre y teléfono" FontSize="14" BackgroundColor="#c5f6ff" TextColor="Black" />
-
-                <Button Clicked="BtnPacientSave_Clicked" Text="Guardar" BackgroundColor="#846AFA" TextColor="Black" Margin="30" CornerRadius="10" Padding="5" HorizontalOptions="Fill" />
+                <Button x:Name="btnPacientSave"
+                       Clicked="BtnPacientSave_Clicked"
+                       Text="Guardar" 
+                       BackgroundColor="#846AFA" 
+                       TextColor="Black" 
+                       Margin="30" />
             </VerticalStackLayout>
         </ScrollView>
 

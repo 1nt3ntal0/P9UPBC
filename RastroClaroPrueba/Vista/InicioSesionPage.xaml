@@ -32,6 +32,7 @@
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="usuario.png" WidthRequest="20" HeightRequest="20"/>
                     <Entry x:Name="UserEntry"
+                           WidthRequest="260"
                         Placeholder="Usuario" 
                         FontSize="16"
                         Keyboard="Text"
@@ -46,6 +47,7 @@
                 <HorizontalStackLayout Spacing="5">
                     <Image Source="Contrasena.png" WidthRequest="20" HeightRequest="20"/>
                     <Entry x:Name="PassEntry"
+                           WidthRequest="230"
                         Placeholder="Contraseña" 
                         IsPassword="True"
                         FontSize="16"
@@ -63,7 +65,7 @@
             </Frame>
             <!-- Checkbox Recordar -->
             <HorizontalStackLayout HorizontalOptions="Start" Spacing="5">
-                <CheckBox BackgroundColor="Transparent" Color="Black"/>
+                <CheckBox x:Name="Checkrecuerdame" BackgroundColor="Transparent" Color="Black"/>
                 <!-- Color transparente para el fondo y negro para la flecha -->
                 <Label Text="Recordar" VerticalOptions="Center" FontSize="14"/>
             </HorizontalStackLayout>
@@ -82,14 +84,14 @@
 
 
             <!-- Botón Adquirir producto -->
-            <Button Text="Adquidir Producto"
+            <!--<Button Text="Adquidir Producto"
                  BackgroundColor="White"
                  TextColor="Black"
                  FontSize="16"
                  CornerRadius="10"
                  Padding="5"
                  HorizontalOptions="Fill"
-                    Clicked="BtnProducto_Clicked"/>
+                     Clicked="BtnProducto_Clicked"/>--> 
 
         </VerticalStackLayout>
     </ScrollView>

@@ -1,55 +1,79 @@
-﻿using RastroClaroPrueba.Utils;
-using System;
-using Microsoft.Maui.Controls;
-using RastroClaroPrueba.Models;
+﻿using RastroClaroPrueba.Services;
+using RastroClaroPrueba.Utils;
 
 namespace RastroClaroPrueba.Vista
 {
     public partial class InicioSesionPage : ContentPage
     {
-        private bool isPasswordVisible = false;
+        private bool _isPasswordVisible = false;
+        private readonly ApiService _apiService = new ApiService();
 
         public InicioSesionPage()
         {
             InitializeComponent();
+            LoadUser();
+        }
+
+        private async void LoadUser()
+        {
+            var filepath = Path.Combine(FileSystem.AppDataDirectory, "Contrasena.txt");
+            if (File.Exists(filepath))
+            {
+                var login = await File.ReadAllTextAsync(filepath);
+                var parts = login.Split(',');
+                UserEntry.Text = parts[0];
+                PassEntry.Text = parts[1];
+            }
         }
 
         private void OnTogglePasswordClicked(object sender, EventArgs e)
         {
-            isPasswordVisible = !isPasswordVisible;
-            PassEntry.IsPassword = !isPasswordVisible;
-            TogglePasswordButton.ImageSource = isPasswordVisible ? "ojo_cerrado.png" : "ojo.png";
+            _isPasswordVisible = !_isPasswordVisible;
+            PassEntry.IsPassword = !_isPasswordVisible;
+            TogglePasswordButton.ImageSource = _isPasswordVisible ? "ojo_cerrado.png" : "ojo.png";
         }
 
         private async void OnIniciarSesionClicked(object sender, EventArgs e)
         {
-            string user = UserEntry.Text;
-            string pass = PassEntry.Text;
+            var usuario = UserEntry.Text;
+            var password = PassEntry.Text;
 
-            if (string.IsNullOrEmpty(user) || string.IsNullOrEmpty(pass))
+            if (string.IsNullOrEmpty(usuario) || string.IsNullOrEmpty(password))
             {
-                await DisplayAlert("Alerta", "Debes ingresar un usuario y contraseña", "Aceptar");
+                await DisplayAlert("Error", "Usuario y contraseña son requeridos", "OK");
                 return;
             }
 
-            ApiService apiService = new ApiService();
-            bool loginExitoso = await apiService.LoginAsync(user, pass);
+            var (success, _) = await _apiService.LoginAsync(usuario, password);
 
-            if (loginExitoso && !string.IsNullOrEmpty(SessionManager.Token) && SessionManager.UserId > 0)
+            if (success)
             {
-                Preferences.Set("AuthToken", SessionManager.Token);
-                await DisplayAlert("Éxito", "Inicio de sesión correcto", "OK");
+                if(Checkrecuerdame.IsChecked)
+                {
+                    var filepath = Path.Combine(FileSystem.AppDataDirectory, "Contrasena.txt");
+                    var login = $"{usuario},{password}";
+                    await File.WriteAllTextAsync(filepath, login);
+
+                }
                 Application.Current.MainPage = new InicioPage();
             }
             else
             {
-                await DisplayAlert("Error", "Usuario o contraseña incorrectos", "Aceptar");
+                await DisplayAlert("Error", "Credenciales incorrectas", "OK");
             }
         }
 
         private async void BtnProducto_Clicked(object sender, EventArgs e)
         {
-            Application.Current.MainPage = new InicioPage();
+            try
+            {
+                string url = "https://www.tupaginaweb.com"; 
+                await Launcher.Default.OpenAsync(new Uri(url));
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", $"No se pudo abrir la página: {ex.Message}", "OK");
+            }
         }
     }
 }

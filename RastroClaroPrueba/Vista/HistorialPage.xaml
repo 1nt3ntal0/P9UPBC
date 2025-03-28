@@ -2,8 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RastroClaroPrueba.Vista.HistorialPage"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="White">
+             NavigationPage.HasNavigationBar="False">
 
     <Grid RowDefinitions="Auto,*,Auto">
         <!-- Barra superior con degradado -->
@@ -11,8 +10,8 @@
             <Grid.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                     <GradientStop Color="#61D2E8" Offset="0.0"/>
-                    <GradientStop Color="#61D2E8" Offset="0.5"/>
-                    <GradientStop Color="Transparent" Offset="1.0"/>
+                    <GradientStop Color="#61D2E8" Offset="0.50"/>
+                    <GradientStop Color="White" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.ColumnDefinitions>
@@ -20,26 +19,21 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                <Label Text="Historial" FontSize="24" TextColor="Black" Margin="10" VerticalOptions="Center" FontAttributes="Bold" />
+                <Label Text="Historial" FontSize="24" TextColor="Black" Margin="20" VerticalOptions="Center" FontAttributes="Bold" />
             </StackLayout>
             <Image Grid.Column="1" Source="logo.png" VerticalOptions="Center" HorizontalOptions="End" HeightRequest="70" WidthRequest="100"/>
         </Grid>
-
-        <!-- Contenido Principal -->
-        <ScrollView Grid.Row="1" Padding="10">
-            <VerticalStackLayout Spacing="20">
-                <Label Text="Filtrar por fecha" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" TextColor="Black"/>
-                <HorizontalStackLayout Padding="10" Spacing="10" HorizontalOptions="Center">
-                    <Entry x:Name="diaEntry" Placeholder="Día" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
-                    <Entry x:Name="mesEntry" Placeholder="Mes" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
-                    <Entry x:Name="anoEntry" Placeholder="Año" WidthRequest="80" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
-                    <Button Text="Buscar" Clicked="OnBuscarClicked" BackgroundColor="#846AFA" TextColor="Black" CornerRadius="10" Padding="5"/>
-                </HorizontalStackLayout>
-
-                <!-- WebView para mostrar el historial -->
-                <WebView x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
-            </VerticalStackLayout>
-        </ScrollView>
+        
+        <!-- Espacio para el mapa y filtros -->
+        <StackLayout Grid.Row="1" Padding="10" Background="White" >
+            <HorizontalStackLayout Padding="10" Spacing="10" HorizontalOptions="Center">
+                <Entry Placeholder="Día" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
+                <Entry Placeholder="Mes" WidthRequest="60" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
+                <Entry Placeholder="Año" WidthRequest="80" Keyboard="Numeric" Background="#c5f6ff" TextColor="Black"/>
+                <Button Text="Buscar" />
+            </HorizontalStackLayout>
+            <WebView x:Name="webView" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+        </StackLayout>
 
         <!-- Barra inferior -->
         <Grid Grid.Row="2" Padding="10">
